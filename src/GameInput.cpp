@@ -33,19 +33,22 @@ Game::handleKeyDown(SDL_Event* event)
     else {
         switch (event->key.keysym.sym) {
         case SDLK_w:
-            playerInputY = INPUT_WEIGHT_Y;
+            //playerInputY = INPUT_WEIGHT_Y;
             break;
         case SDLK_a:
             playerInputX = -INPUT_WEIGHT_X;
             break;
         case SDLK_s:
-            playerInputY = -INPUT_WEIGHT_Y;
+            //playerInputY = -INPUT_WEIGHT_Y;
             break;
         case SDLK_d:
             playerInputX = INPUT_WEIGHT_X;
             break;
         case SDLK_SPACE:
             character->fire();
+            break;
+        case SDLK_j:
+            character->jump();
             break;
         }
     }

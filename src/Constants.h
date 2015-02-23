@@ -24,6 +24,10 @@
 #define CHARACTER_MOVE_SIZE 5
 #define INPUT_WEIGHT_X 1
 #define INPUT_WEIGHT_Y 1
+#define JUMP_VELOCITY_MAX 10
+#define JUMP_DECAY 1
+#define FALLY_ACCELERATION 1
+#define FALL_VELOCITY_MAX 5
 
 // entities
 #define BULLET_WIDTH 2
@@ -35,11 +39,6 @@
 #define GAME_TITLE "Star Commander"
 #define BASE_SCORE_STRING "Score: "
 
-// DEPRECATED - use Vector2D instead
-typedef struct {
-    int x;
-    int y;
-} Coordinate;
 
 typedef struct {
     int x;

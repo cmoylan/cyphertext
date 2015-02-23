@@ -117,6 +117,8 @@ Game::scoreDisplay()
 void
 Game::update(int ticks)
 {
+    character->update();
+
     background->tick(ticks);
     BulletRegistry::getInstance().tick();
 

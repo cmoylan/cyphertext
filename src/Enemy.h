@@ -24,7 +24,7 @@ class Enemy : public Entity {
 
 public:
     // constructor
-    Enemy(Game* game, std::string texture, Coordinate position);
+    Enemy(Game* game, std::string texture, Vector2D position);
 
     // destructor
     ~Enemy();

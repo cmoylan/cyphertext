@@ -54,10 +54,10 @@ Game::initEntities()
 {
     background = new Background("res/background.png");
 
-    Coordinate position = { 30, 80 };
+    Vector2D position = { 30, 80 };
     this->enemy = new Enemy(this, "res/enemy.png", position);
 
-    position.y = -70;
+    position.y = 0;
     this->character = new Character(this, "res/spaceship.png", position);
 }
 

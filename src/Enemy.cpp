@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy(Game* game, std::string texture, Coordinate position)
+Enemy::Enemy(Game* game, std::string texture, Vector2D position)
 {
     this->game = game;
 

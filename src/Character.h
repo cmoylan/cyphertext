@@ -1,9 +1,6 @@
 #pragma once
 
 #include <string>
-//#include <glm/glm.hpp>
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtc/type_ptr.hpp>
 
 #include "OpenGL.h"
 #include "Util.h"
@@ -22,9 +19,16 @@ class Character : public Entity {
     Game* game;
 
 public:
+    // --- TODO: move to entity
+    bool jumping = false;
+    int jumpVelocity = 0;
+    bool falling = false;
+    int fallVelocity = 0;
+    void update();
+    // ---
 
     // constructor
-    Character(Game* game, std::string texture, Coordinate potision);
+    Character(Game* game, std::string texture, Vector2D potision);
 
     // destructor
     ~Character();
@@ -32,6 +36,8 @@ public:
     void center();
 
     void fire();
+
+    void jump();
 
     void move(int x, int y);
 
