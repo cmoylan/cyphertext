@@ -1,8 +1,4 @@
-# Star Commander #
-
 A game.
-
-![Screenshot of the game](screenshot.png)
 
 ## Requirements ##
 

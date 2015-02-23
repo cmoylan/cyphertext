@@ -53,6 +53,9 @@ Game::handleKeyDown(SDL_Event* event)
     // --- all states --- //
     switch (event->key.keysym.sym) {
     case SDLK_ESCAPE:
+        running = false;
+        break;
+    case SDLK_m:
         paused = !paused;
         menu->toggle();
 

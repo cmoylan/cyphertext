@@ -29,8 +29,8 @@ Game::initAI()
 {
     // setup enemy AI
     enemyAI = new EnemyAI();
-    enemyAI->registerPlayer(character);
-    enemyAI->registerEnemy(enemy);
+    //enemyAI->registerPlayer(character);
+    //enemyAI->registerEnemy(enemy);
 
     collisionManager = new CollisionManager();
     collisionManager->registerEntity(character);
