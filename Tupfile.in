@@ -25,7 +25,7 @@ starcom_CFLAGS = -I/usr/local/include \
 		 @SDL_Mixer_CFLAGS@ \
 		 @Freetype_CFLAGS@ \
 		 @SOIL_CFLAGS@ \
-		 -I./include
+		 -I./include/
 
 # g - compile with debug information
 # Wall - show all compiler warnings

@@ -12,6 +12,7 @@
 #include "CollisionManager.h"
 #include "EnemyAI.h"
 #include "Enemy.h"
+#include "Level.h"
 #include "Menu.h"
 #include "Sound.h"
 #include "TextRenderer.h"
@@ -23,6 +24,7 @@ class EnemyAI;
 class CollisionManager;
 class Background;
 class Menu;
+class Level;
 
 class Game {
 
@@ -45,7 +47,8 @@ class Game {
     CollisionManager *collisionManager;
     EnemyAI *enemyAI; // enemy AI manager
 
-    Menu* menu;
+    Level *level;
+    Menu *menu;
 
     int playerInputX;
     int playerInputY;
