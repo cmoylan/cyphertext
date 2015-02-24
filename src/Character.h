@@ -20,10 +20,10 @@ class Character : public Entity {
 
 public:
     // --- TODO: move to entity
-    bool jumping = false;
-    int jumpVelocity = 0;
-    bool falling = false;
-    int fallVelocity = 0;
+    bool jumping; // = false;
+    int jumpVelocity; // = 0;
+    bool falling; // = false;
+    int fallVelocity; // = 0;
     void update();
     // ---
 

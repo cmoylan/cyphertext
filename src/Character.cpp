@@ -12,6 +12,13 @@ Character::Character(Game* game, std::string texture, Vector2D position)
     origin.y = position.y - (size.y / 2);
 
     initGL(texture);
+
+    // --- TODO: move to entity
+    jumping = false;
+    jumpVelocity = 0;
+    falling = false;
+    fallVelocity = 0;
+    // ---
 }
 
 
@@ -52,7 +59,6 @@ Character::hit()
 void
 Character::jump()
 {
-    //origin.y += JUMP_VELOCITY_MAX;
     jumping = true;
     jumpVelocity = JUMP_VELOCITY_MAX;
 }
@@ -61,21 +67,15 @@ Character::jump()
 void
 Character::move(int x, int y)
 {
-    int newX = origin.x;
-    int newY = origin.y;
-    int movementSize = CHARACTER_MOVE_SIZE;
+    int newX = origin.x + (x * CHARACTER_MOVE_SIZE);
+    int newY = origin.y + (y * CHARACTER_MOVE_SIZE);
 
-    newX += (x * movementSize);
-    newY += (y * movementSize);
-
-    // TODO: figure out your coordinate system
     if ((newX >= -SCREEN_X) && ((newX + size.x) <= SCREEN_X)) {
         origin.x = newX;
     }
     if ((newY >= -SCREEN_Y) && ((newY + size.y) <= SCREEN_Y)) {
         origin.y = newY;
     }
-    //printf("newx and y are: [%dd, %d]\n", newX, newY);
 }
 
 
@@ -108,6 +108,7 @@ Character::update()
     if (falling && origin.y <= -SCREEN_Y) {
         falling = false;
         fallVelocity = 0;
+        origin.y = -SCREEN_Y;
     }
 
 }

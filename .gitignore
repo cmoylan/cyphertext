@@ -4,6 +4,7 @@ engine
 
 # autoconf stuff
 Makefile
+Tupfile
 aclocal.m4
 autom4te.cache/*
 config.log
