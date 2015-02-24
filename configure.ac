@@ -29,4 +29,4 @@ AC_ARG_WITH([mac],
   )
 
 
-AC_OUTPUT(Makefile) # src/Makefile)
+AC_OUTPUT(Makefile Tupfile) # src/Makefile)

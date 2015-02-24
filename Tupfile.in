@@ -1,12 +1,4 @@
-SUBDIRS = src
-BUILD_DIR = build
-
-#OBJ_NAME specifies the name of our exectuable
-OBJ_NAME = engine
-
-#CC specifies which compiler we're using
-CC = g++
-
+#OBJS specifies which files to compile as part of the project
 OBJS = src/Util.cpp \
 	src/Entity.cpp \
 	src/Character.cpp \
@@ -23,6 +15,9 @@ OBJS = src/Util.cpp \
 	src/TextRenderer.cpp \
 	src/main.cpp
 
+#build dir...
+BUILD_DIR = build
+
 starcom_CFLAGS = -I/usr/local/include \
 		 -I/usr/include/SOIL \
 		 -I/usr/include/GL \
@@ -32,7 +27,10 @@ starcom_CFLAGS = -I/usr/local/include \
 		 @SOIL_CFLAGS@ \
 		 -I./include
 
-
+# g - compile with debug information
+# Wall - show all compiler warnings
+# Wextra - show extra compiler warninres
+# std=c++0 - compile against c++11 standard
 CFLAGS = -g -Wall -Wextra -std=c++0x $(starcom_CFLAGS) $(OPTFLAGS)
 
 starcom_LIBS = -L/usr/local/lib \
@@ -43,31 +41,16 @@ starcom_LIBS = -L/usr/local/lib \
 
 LIBS = $(starcom_LIBS)
 
-LINKER_FLAGS = @GL_LINKER_FLAG@ -lSDL2 -lGLEW -lSOIL
+LINKER_FLAGS = @GL_LINKER_FLAG@ -lSDL2 -lGLEW -lSOIL -lSDL2_mixer -lfreetype
 
+#assemble the compiler command
+CC = g++ $(CFLAGS) $(LIBS)
 
-all : clean $(OBJS)
-	$(CC) $(OBJS) \
-	$(CFLAGS) $(LIBS) \
-	$(LINKER_FLAGS) \
-	-o $(OBJ_NAME)
+#OBJ_NAME specifies the name of our exectuable
+OBJ_NAME = engine
 
-clean:
-	rm -f $(OBJ_NAME)
-	rm -f build/*
+# compile each .cpp file into a .o
+: foreach $(OBJS) |> $(CC) -c %f -o %o |> $(BUILD_DIR)/%B.o
 
-distclean: clean
-	rm config.log config.status configure
-	rm -r autom4te.cache aclocal.m4
-	rm Makefile Tupfile
-
-# http://astyle.sourceforge.net/astyle.html
-style:
-	astyle --options=.astylerc `ls src/*.h src/*.cpp`
-
-# http://cppcheck.sourceforge.net/manual.html
-lint:
-	cppcheck --enable=all ./src
-
-grind: all
-	valgrind ./$(OBJ_NAME)
+# compile and link all .o into the main executable
+: $(BUILD_DIR)/*.o |> $(CC) %f -o %o $(LINKER_FLAGS) |> $(OBJ_NAME)
