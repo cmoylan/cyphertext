@@ -12,16 +12,16 @@ Level::~Level()
 }
 
 
-bool 
+bool
 Level::loadFromJson(const std::string filename)
 {
     std::string jsonString = Util::loadStringFromFile(filename);
-    
+
     //const char* json = "{\"project\":\"rapidjson\",\"stars\":10}";
     rapidjson::Document d;
     d.Parse(jsonString.c_str());
-    
-      // 2. Modify it by DOM.
+
+    // 2. Modify it by DOM.
     //rapidjson::Value& s = d["stars"];
     //s.SetInt(s.GetInt() + 1);
 
@@ -32,4 +32,6 @@ Level::loadFromJson(const std::string filename)
 
     // Output {"project":"rapidjson","stars":11}
     std::cout << buffer.GetString() << std::endl;
+
+    return true;
 }

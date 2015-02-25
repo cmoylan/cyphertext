@@ -21,7 +21,7 @@ Game::init()
     initAI();
 
     menu = new Menu();
-    
+
     level = new Level();
     level->loadFromJson("res/test-level.json");
 }

@@ -16,6 +16,6 @@ class Level {
 public:
     Level();
     ~Level();
-    
+
     bool loadFromJson(const std::string filename);
 };

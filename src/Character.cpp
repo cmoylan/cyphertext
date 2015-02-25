@@ -59,8 +59,10 @@ Character::hit()
 void
 Character::jump()
 {
-    jumping = true;
-    jumpVelocity = JUMP_VELOCITY_MAX;
+    if (!falling && !jumping) {
+        jumping = true;
+        jumpVelocity = JUMP_VELOCITY_MAX;
+    }
 }
 
 
