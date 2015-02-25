@@ -17,31 +17,32 @@ Level::loadFromJson(const std::string filename)
 {
     using namespace rapidjson;
 
+    SizeType i;
+    Document document;
+
     std::string jsonString = Util::loadStringFromFile(filename);
 
-    Document document;
     document.Parse(jsonString.c_str());
 
-    //rapidjson::Value& s;
     mapWidth = document["width"].GetInt();
     mapHeight = document["height"].GetInt();
     tileWidth = document["tilewidth"].GetInt();
     tileHeight = document["tileheight"].GetInt();
-    //s.SetInt(s.GetInt() + 1);
-
-    // Stringify the DOM
-    //rapidjson::StringBuffer buffer;
-    //rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-    //doc.Accept(writer);
-
-    // Output {"project":"rapidjson","stars":11}
-    //std::cout << buffer.GetString() << std::endl;
 
     // Using a reference for consecutive access is handy and faster.
-    const Value& layers = document["layers"];
-    for (SizeType i = 0; i < layers.Size(); i++) {
-        printf("layers[%d] = %s\n", i, layers[i]["name"].GetString());
+    //const Value& layers = document["layers"];
+    //for (SizeType i = 0; i < layers.Size(); i++) {
+    //    printf("layers[%d] = %s\n", i, layers[i]["name"].GetString());
+    //}
+
+    // TODO: make sure this exists before trying to call it
+    const Value& data = document["layers"][0]["data"];
+    for (i = 0; i < data.Size(); i++) {
+        platforms.push_back(data[i].GetInt());
     }
+    //platforms(document["layers"][0]["data"]);
+    printf("platforms is populated. size: %d\n", platforms.size());
+    //printf("layer 0: %s\n", document["layers"][0]["name"].GetString());
 
 
     return true;

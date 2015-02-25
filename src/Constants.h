@@ -33,6 +33,11 @@
 #define BULLET_WIDTH 2
 #define BULLET_HEIGHT 2
 
+// level
+#define TILES_ON_SCREEN_X 20
+#define TILES_ON_SCREEN_Y 20
+
+// game
 #define MENU_ITEM_WIDTH 50
 #define MENU_ITEM_HEIGHT 20
 

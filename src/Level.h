@@ -2,17 +2,19 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
 
+#include "Constants.h"
 #include "Util.h"
 
 //using namespace rapidjson;
 /**
  * TMX Subset:
- * Layer 0: Level - surfaces the player can walk on
+ * Layer 0: Platforms - surfaces the player can walk on
  */
 
 class Level {
@@ -22,6 +24,10 @@ public:
     int mapHeight;
     int tileWidth;
     int tileHeight;
+    Vector2D camera;
+
+    std::vector<int> platforms;
+
 
     Level();
     ~Level();

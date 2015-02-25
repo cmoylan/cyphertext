@@ -1,5 +1,4 @@
-#ifndef BULLET_REGISTRY_H
-#define BULLET_REGISTRY_H
+#pragma once
 
 #include <stdio.h>
 #include <vector>
@@ -99,5 +98,3 @@ private:
     void initGL();
 
 };
-
-#endif
