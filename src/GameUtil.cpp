@@ -24,6 +24,7 @@ Game::init()
 
     level = new Level();
     level->loadFromJson("res/test-level.json");
+    level->print();
 }
 
 
