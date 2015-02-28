@@ -46,7 +46,7 @@ LIBS = $(starcom_LIBS)
 LINKER_FLAGS = @GL_LINKER_FLAG@ -lSDL2 -lGLEW -lSOIL
 
 
-all : clean $(OBJS)
+all : $(OBJS)
 	$(CC) $(OBJS) \
 	$(CFLAGS) $(LIBS) \
 	$(LINKER_FLAGS) \

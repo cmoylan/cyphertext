@@ -30,10 +30,17 @@ Level::loadFromJson(const std::string filename)
     tileHeight = document["tileheight"].GetInt();
 
     // Using a reference for consecutive access is handy and faster.
-    //const Value& layers = document["layers"];
-    //for (SizeType i = 0; i < layers.Size(); i++) {
-    //    printf("layers[%d] = %s\n", i, layers[i]["name"].GetString());
-    //}
+    const Value& layers = document["layers"];
+    std::string layerName;
+    for (SizeType i = 0; i < layers.Size(); i++) {
+        //printf("layers[%d] = %s\n", i, layers[i]["name"].GetString());
+        layerName = layers[i]["name"].GetString();
+      if (layerName == "platforms") {
+        setPlatforms();
+      }
+      else if (layerName) {
+      }
+    }
 
     // TODO: make sure this exists before trying to call it
     const Value& data = document["layers"][0]["data"];

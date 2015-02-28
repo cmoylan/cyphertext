@@ -33,6 +33,7 @@ public:
     ~Level();
 
     bool loadFromJson(const std::string filename);
+    void setPlatforms(int data[]);
 
     void print();
 
