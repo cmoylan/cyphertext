@@ -8,6 +8,7 @@
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
 
+#include "OpenGL.h"
 #include "Constants.h"
 #include "Util.h"
 
@@ -31,10 +32,15 @@ public:
 
     Level();
     ~Level();
+    
+    void initGL();
 
     bool loadFromJson(const std::string filename);
-    void setPlatforms(int data[]);
+    bool setPlatforms(const rapidjson::Value& data);
+    bool setMetadata(const rapidjson::Value& data);
 
+    void render();
+    
     void print();
 
 };

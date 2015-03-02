@@ -1,5 +1,6 @@
 #OBJS specifies which files to compile as part of the project
 OBJS = src/Util.cpp \
+	src/Shader.cpp \
 	src/Entity.cpp \
 	src/Character.cpp \
 	src/Enemy.cpp \

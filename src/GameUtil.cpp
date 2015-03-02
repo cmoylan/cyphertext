@@ -3,6 +3,9 @@
 void
 Game::cleanup()
 {
+    delete menu;
+    delete level;
+    
     Sound::getInstance()->freeAll();
     Mix_CloseAudio();
 
@@ -23,7 +26,7 @@ Game::init()
     menu = new Menu();
 
     level = new Level();
-    level->loadFromJson("res/test-level.json");
+    level->loadFromJson("res/simple-level.json");
     level->print();
 }
 
