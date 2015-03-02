@@ -5,7 +5,7 @@ Game::cleanup()
 {
     delete menu;
     delete level;
-    
+
     Sound::getInstance()->freeAll();
     Mix_CloseAudio();
 

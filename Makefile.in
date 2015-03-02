@@ -8,6 +8,7 @@ OBJ_NAME = engine
 CC = g++
 
 OBJS = src/Util.cpp \
+  src/Shader.cpp \
 	src/Entity.cpp \
 	src/Character.cpp \
 	src/Enemy.cpp \

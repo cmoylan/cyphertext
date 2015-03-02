@@ -6,24 +6,30 @@
 #include "OpenGL.h"
 #include "Util.h"
 
-typedef std::map<std::string, GLuint> ShaderList; 
+typedef std::map<std::string, GLuint> ShaderList;
 
 class Shader {
 
     ShaderList shaders;
-    
+
 public:
+
     static Shader *getInstance()
     {
-	static Shader instance;
-	return &instance;
+        static Shader instance;
+        return &instance;
     }
-    
+
     GLuint get(const std::string name);
-    
+
+    void use(const std::string name);
+
 private:
-    GLuint set(std::string name, std::string vertexSrc, std::string fragmentSrc);
-  
+
+    GLuint set(const std::string name,
+               const std::string vertexSrc,
+               const std::string fragmentSrc);
+
     // --- Singleton things
     Shader(); // Don't implement
     ~Shader();

@@ -2,7 +2,7 @@
 
 Level::Level()
 {
-
+    Shader::getInstance();
 }
 
 
@@ -50,8 +50,8 @@ Level::loadFromJson(const std::string filename)
         }
         else if (layerName == "metadata") {
             if (!setMetadata(layers[i]["data"])) {
-		return false;
-	    }
+                return false;
+            }
         }
     }
 
@@ -78,22 +78,22 @@ Level::render()
     // for now we can just upload the individual textures
     std::vector<int>::iterator p;
     int i, row;
-    
+
     row = 0;
 
     printf("\n[%d]:  ", row);
-    
-    for(p = platforms.begin(), i = 1; p != platforms.end(); ++p, ++i) {
 
-	
-	printf("%d | ", *p);
-	
-	if ((i % mapWidth == 0) && (row < (mapHeight -1))) {
-	  ++row;
-	  printf("\n[%d]:  ", row);
-	}
+    for (p = platforms.begin(), i = 1; p != platforms.end(); ++p, ++i) {
+
+
+        printf("%d | ", *p);
+
+        if ((i % mapWidth == 0) && (row < (mapHeight - 1))) {
+            ++row;
+            printf("\n[%d]:  ", row);
+        }
     }
-    
+
     printf("\n");
 
 }

@@ -10,6 +10,7 @@
 
 #include "OpenGL.h"
 #include "Constants.h"
+#include "Shader.h"
 #include "Util.h"
 
 //using namespace rapidjson;
@@ -32,7 +33,7 @@ public:
 
     Level();
     ~Level();
-    
+
     void initGL();
 
     bool loadFromJson(const std::string filename);
@@ -40,7 +41,7 @@ public:
     bool setMetadata(const rapidjson::Value& data);
 
     void render();
-    
+
     void print();
 
 };

@@ -6,6 +6,7 @@
 
 #include "OpenGL.h"
 #include "Constants.h"
+#include "Shader.h"
 #include "Util.h"
 
 

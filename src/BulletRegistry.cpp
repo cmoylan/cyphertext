@@ -164,7 +164,7 @@ BulletRegistry::render()
         glUniform3f(uniColor, 1.0f, 0.0f, 0.0f);
 
         // position
-	// TODO: abstract into method
+        // TODO: abstract into method
         uniTrans = glGetUniformLocation(shaderProgram, "trans");
         glm::mat4 trans;
         trans = glm::translate(trans,
