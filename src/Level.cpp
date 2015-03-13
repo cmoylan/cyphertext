@@ -2,7 +2,7 @@
 
 Level::Level()
 {
-    Shader::getInstance();
+    initGL();
 }
 
 
@@ -15,7 +15,46 @@ Level::~Level()
 void
 Level::initGL()
 {
+    Util::createAndBindContext(&vao);
 
+    glGenTextures(1, &tex);
+    Util::loadTexture(tex, "res/red-square.png");
+
+    shaderProgram = Shader::getInstance()->get("texturedSquare");
+    glUseProgram(shaderProgram);
+
+    Util::mapPositionAttribute(shaderProgram);
+    Util::mapTextureAttribute(shaderProgram);
+
+    // translation attr from vector shader
+    uniTrans = glGetUniformLocation(shaderProgram, "trans");
+
+    // --- send initial data to the shader
+    // TODO: centralize elements[]
+    GLuint elements[] = {
+        0, 1, 2,
+        2, 3, 0
+    };
+
+    // TODO: scaling magic
+    GLfloat vertices[] = {
+        0.f, (SCALE_Y * 10.f), // top left
+        (SCALE_X * 10.f), (SCALE_Y * 10.f), // top right
+        (SCALE_X * 10.f), 0.f, // bottom right
+        0.f, 0.f, // bottom left
+
+        // Texcoords
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f
+    };
+
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements),
+                 elements, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    Util::resetGlState();
 }
 
 
@@ -56,7 +95,7 @@ Level::loadFromJson(const std::string filename)
     }
 
     //printf("platforms is populated. size: %d\n", platforms.size());
-    render();
+    //render();
     return true;
 }
 
@@ -67,6 +106,21 @@ Level::print()
     printf("----- Level Info:\n");
     printf("width: %d, height: %d\n", mapWidth, mapHeight);
     printf("tilewidth: %d, tileheight: %d\n", tileWidth, tileHeight);
+
+    // ----- print out the level ----- //
+    std::vector<int>::iterator p;
+    int i, row;
+
+    row = 0;
+    printf("\n[%d]:  ", row);
+    for (p = platforms.begin(), i = 1; p != platforms.end(); ++p, ++i) {
+        printf("%d | ", *p);
+        if ((i % mapWidth == 0) && (row < (mapHeight - 1))) {
+            ++row;
+            printf("\n[%d]:  ", row);
+        }
+    }
+    printf("\n");
 }
 
 
@@ -77,25 +131,32 @@ Level::render()
     // textures, ideally will be atlased
     // for now we can just upload the individual textures
     std::vector<int>::iterator p;
-    int i, row;
+    int i, row, col;
+
+    glUseProgram(shaderProgram);
+    glBindVertexArray(vao);
+    glBindTexture(GL_TEXTURE_2D, tex);
+
+    glm::mat4 trans;
+    trans = glm::translate(trans,
+                           glm::vec3((SCALE_X * 1.f),
+                                     (SCALE_Y * 1.f),
+                                     1.0f));
+    glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(trans));
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     row = 0;
-
-    printf("\n[%d]:  ", row);
-
     for (p = platforms.begin(), i = 1; p != platforms.end(); ++p, ++i) {
+        //transform and draw
+        //col = i
 
-
-        printf("%d | ", *p);
 
         if ((i % mapWidth == 0) && (row < (mapHeight - 1))) {
             ++row;
-            printf("\n[%d]:  ", row);
         }
     }
 
-    printf("\n");
-
+    Util::resetGlState();
 }
 
 

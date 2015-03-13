@@ -21,6 +21,9 @@
 
 class Level {
 
+    GLuint vao, tex, uniTrans;
+    GLuint shaderProgram;
+
 public:
     int mapWidth;
     int mapHeight;

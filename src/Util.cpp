@@ -2,15 +2,6 @@
 
 
 void
-Util::resetGlState()
-{
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glBindVertexArray(0);
-    glUseProgram(0);
-}
-
-
-void
 Util::createAndBindContext(GLuint* vao)
 {
     // TODO: error handling
@@ -180,4 +171,37 @@ Util::loadTexture(GLuint buffer, const std::string& filename)
 
     SOIL_free_image_data(image);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+
+void
+Util::mapPositionAttribute(GLuint program, const std::string name)
+{
+    // TODO: error handing and return bool
+    GLint posAttrib = glGetAttribLocation(program, name.c_str());
+    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(posAttrib);
+}
+
+
+void
+Util::mapTextureAttribute(GLuint program, const std::string name)
+{
+    // TODO: error handling and return bool
+    // texture position
+    GLint texAttrib = glGetAttribLocation(program, name.c_str());
+    glEnableVertexAttribArray(texAttrib);
+
+    // the texcoords are tightly packed after the verticies in the array
+    glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 0,
+                          (void*)(8 * sizeof(float)));
+}
+
+
+void
+Util::resetGlState()
+{
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindVertexArray(0);
+    glUseProgram(0);
 }
