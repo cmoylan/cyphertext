@@ -24,6 +24,8 @@ class Level {
     GLuint vao, tex, uniTrans;
     GLuint shaderProgram;
 
+    float tileSizeX, tileSizeY;
+
 public:
     int mapWidth;
     int mapHeight;
