@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -24,6 +25,8 @@ class Level {
     GLuint vao, tex, uniTrans;
     GLuint shaderProgram;
 
+    float tileSizeX, tileSizeY;
+
 public:
     int mapWidth;
     int mapHeight;
@@ -32,6 +35,7 @@ public:
     Vector2D camera;
 
     std::vector<int> platforms;
+    std::map<const std::string, GLuint> textures;
 
 
     Level();
@@ -40,6 +44,7 @@ public:
     void initGL();
 
     bool loadFromJson(const std::string filename);
+    GLuint loadTexture(const std::string filename);
     bool setPlatforms(const rapidjson::Value& data);
     bool setMetadata(const rapidjson::Value& data);
 

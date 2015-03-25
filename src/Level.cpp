@@ -2,6 +2,10 @@
 
 Level::Level()
 {
+
+    tileSizeX = (2 * SCREEN_X) / TILES_ON_SCREEN_X;
+    tileSizeY = (2 * SCREEN_Y) / TILES_ON_SCREEN_Y;
+
     initGL();
 }
 
@@ -38,9 +42,9 @@ Level::initGL()
 
     // TODO: scaling magic
     GLfloat vertices[] = {
-        0.f, (SCALE_Y * 10.f), // top left
-        (SCALE_X * 10.f), (SCALE_Y * 10.f), // top right
-        (SCALE_X * 10.f), 0.f, // bottom right
+        0.f, (SCALE_Y * tileSizeY), // top left
+        (SCALE_X * tileSizeX), (SCALE_Y * tileSizeY), // top right
+        (SCALE_X * tileSizeX), 0.f, // bottom right
         0.f, 0.f, // bottom left
 
         // Texcoords
@@ -94,9 +98,21 @@ Level::loadFromJson(const std::string filename)
         }
     }
 
+    // TODO: load sprites into textures
+    // load sprites into textured
+    // use glTexSubImage2d to only use a portion of the texture
+
     //printf("platforms is populated. size: %d\n", platforms.size());
     //render();
     return true;
+}
+
+
+
+GLuint
+Level::loadTexture(const std::string filename)
+{
+
 }
 
 
@@ -132,26 +148,40 @@ Level::render()
     // for now we can just upload the individual textures
     std::vector<int>::iterator p;
     int i, row, col;
+    glm::mat4 trans;
 
+    //printf("tilesizeX is : %f\n");
     glUseProgram(shaderProgram);
     glBindVertexArray(vao);
     glBindTexture(GL_TEXTURE_2D, tex);
 
-    glm::mat4 trans;
-    trans = glm::translate(trans,
-                           glm::vec3((SCALE_X * 1.f),
-                                     (SCALE_Y * 1.f),
-                                     1.0f));
-    glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(trans));
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
+    // TODO: start row at 1, remove (row+1) in glm::vec3 call
     row = 0;
+    col = 0;
     for (p = platforms.begin(), i = 1; p != platforms.end(); ++p, ++i) {
-        //transform and draw
-        //col = i
+        //printf("row and col are: %d, %d\n", row, col);
 
+        // if (*p > 0) {
+        //    useTexture(*p)
+        if (*p == 8) {
+            glm::mat4 trans;
+            trans = glm::translate(trans,
+                                   //glm::vec3((SCALE_X * (10 * col)),
+                                   //      (SCALE_Y * (10 * row)),
+                                   glm::vec3((SCALE_X * ((float) - SCREEN_X + (tileSizeX * col))),
+                                             (SCALE_Y * ((float) SCREEN_Y - (tileSizeY * (row + 1)))),
+                                             1.0f));
 
-        if ((i % mapWidth == 0) && (row < (mapHeight - 1))) {
+            uniTrans = glGetUniformLocation(shaderProgram, "trans");
+            glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(trans));
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        }
+
+        if (col < (TILES_ON_SCREEN_X - 1)) {
+            ++col;
+        }
+        else {
+            col = 0;
             ++row;
         }
     }
