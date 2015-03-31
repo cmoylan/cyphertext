@@ -12,7 +12,7 @@ Level::Level()
 
 Level::~Level()
 {
-
+    // clear textures
 }
 
 
@@ -80,10 +80,11 @@ Level::loadFromJson(const std::string filename)
     tileWidth = document["tilewidth"].GetInt();
     tileHeight = document["tileheight"].GetInt();
 
+    // TODO: possibly abstract
     // Using a reference for consecutive access is handy and faster.
     const Value& layers = document["layers"];
 
-    for (SizeType i = 0; i < layers.Size(); i++) {
+    for (i = 0; i < layers.Size(); i++) {
         layerName = layers[i]["name"].GetString();
 
         if (layerName == "platforms") {
@@ -98,8 +99,45 @@ Level::loadFromJson(const std::string filename)
         }
     }
 
-    //printf("platforms is populated. size: %d\n", platforms.size());
-    //render();
+    // TODO: load sprites into textures
+    // load sprites into textured
+    // use glTexSubImage2d to only use a portion of the texture
+    const Value& tilesets = document["tilesets"];
+    for (i = 0; i < tilesets.Size(); i++) {
+      if (!loadTileset(tilesets[i])) {
+        return false;
+      }
+    }
+
+    return true;
+}
+
+
+
+bool
+Level::loadTileset(const rapidjson::Value& data)
+{
+    GLuint tex;
+
+    glGenTextures(1, &tex);
+    //Util::loadTexture(tex, filename);
+
+    // "firstgid":1,
+    //     "image":"..\/..\/..\/..\/Downloads\/tileset\/grass-tiles-2-small.png",
+    //     "imageheight":192,
+    //     "imagewidth":384,
+    //     "margin":0,
+    //     "name":"grass-tiles-2-small",
+    //     "properties":
+    //        {
+    //        },
+    //     "spacing":0,
+    //     "tileheight":32,
+    //     "tilewidth":32
+
+    //LevelTexture levelTexture = {};
+    //textures.insert(layer, tex);
+
     return true;
 }
 
@@ -196,4 +234,10 @@ Level::setPlatforms(const rapidjson::Value& data)
     }
 
     return true;
+}
+
+
+void
+Level::unloadTextures()
+{
 }

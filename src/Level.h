@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -19,6 +20,18 @@
  * Layer 0: Platforms - surfaces the player can walk on
  */
 
+typedef struct {
+    //const std::string filename;
+    GLuint textureId;
+    int firdGid;
+    int lastGid;
+    int width;
+    int height;
+    int tileWidth;
+    int tileHeight;
+} LevelTexture;
+
+
 class Level {
 
     GLuint vao, tex, uniTrans;
@@ -34,6 +47,7 @@ public:
     Vector2D camera;
 
     std::vector<int> platforms;
+    std::map<const std::string, LevelTexture> textures;
 
 
     Level();
@@ -42,6 +56,7 @@ public:
     void initGL();
 
     bool loadFromJson(const std::string filename);
+    bool loadTileset(const rapidjson::Value& data);
     bool setPlatforms(const rapidjson::Value& data);
     bool setMetadata(const rapidjson::Value& data);
 
@@ -49,4 +64,5 @@ public:
 
     void print();
 
+    void unloadTextures();
 };
