@@ -23,13 +23,15 @@
 typedef struct {
     //const std::string filename;
     GLuint textureId;
-    int firdGid;
+    int firstGid;
     int lastGid;
     int width;
     int height;
     int tileWidth;
     int tileHeight;
 } LevelTexture;
+
+typedef std::map<std::string, LevelTexture> TextureList;
 
 
 class Level {
@@ -47,7 +49,7 @@ public:
     Vector2D camera;
 
     std::vector<int> platforms;
-    std::map<const std::string, LevelTexture> textures;
+    TextureList textures;
 
 
     Level();
@@ -61,6 +63,12 @@ public:
     bool setMetadata(const rapidjson::Value& data);
 
     void render();
+
+    /**
+     * Sets the correct texture for the given GID
+     * @param gid
+     */
+    void useTextureFor(int gid);
 
     void print();
 

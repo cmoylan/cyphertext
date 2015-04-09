@@ -99,7 +99,6 @@ Level::loadFromJson(const std::string filename)
         }
     }
 
-    // TODO: load sprites into textures
     // load sprites into textured
     // use glTexSubImage2d to only use a portion of the texture
     const Value& tilesets = document["tilesets"];
@@ -113,30 +112,36 @@ Level::loadFromJson(const std::string filename)
 }
 
 
-
 bool
 Level::loadTileset(const rapidjson::Value& data)
 {
+    using namespace rapidjson;
+
     GLuint tex;
+    int firstGid, lastGid, w, h, tw, th;
+    std::string filename;
+    std::string layername;
 
     glGenTextures(1, &tex);
-    //Util::loadTexture(tex, filename);
 
-    // "firstgid":1,
-    //     "image":"..\/..\/..\/..\/Downloads\/tileset\/grass-tiles-2-small.png",
-    //     "imageheight":192,
-    //     "imagewidth":384,
-    //     "margin":0,
-    //     "name":"grass-tiles-2-small",
-    //     "properties":
-    //        {
-    //        },
-    //     "spacing":0,
-    //     "tileheight":32,
-    //     "tilewidth":32
+    filename = data["image"].GetString();
+    layername = data["name"].GetString();
+    // FIXME: test if this stuff is found...it should be there
+    //if (!filename || !layername) {
+    //	return false;
+    //}
 
-    //LevelTexture levelTexture = {};
-    //textures.insert(layer, tex);
+    Util::loadTexture(tex, filename);
+
+    firstGid = data["firstgid"].GetInt();
+    w = data["imagewidth"].GetInt();
+    h = data["imageheight"].GetInt();
+    tw = data["tilewidth"].GetInt();
+    th = data["tileheight"].GetInt();
+    lastGid = firstGid + ((w / tw) * (h / th)) - 1;
+
+    LevelTexture levelTexture = { tex, firstGid, lastGid, w, h, tw, th };
+    textures[layername] = levelTexture;
 
     return true;
 }
@@ -151,6 +156,7 @@ Level::print()
 
     // ----- print out the level ----- //
     std::vector<int>::iterator p;
+    TextureList::iterator t;
     int i, row;
 
     row = 0;
@@ -162,6 +168,16 @@ Level::print()
             printf("\n[%d]:  ", row);
         }
     }
+    printf("\n");
+
+    // iterate over tilsets
+    for (t = textures.begin(); t != textures.end(); t++) {
+	printf("\ntileset: %s \n", t->first.c_str());
+	printf("--- details: firstGID: %d lastGid: %d, w: %d, h: %d, tw: %d, th: %d\n",
+	       t->second.firstGid, t->second.lastGid, t->second.width,
+	       t->second.height, t->second.tileWidth, t->second.tileHeight);
+    }
+
     printf("\n");
 }
 
@@ -240,4 +256,35 @@ Level::setPlatforms(const rapidjson::Value& data)
 void
 Level::unloadTextures()
 {
+}
+
+
+void
+Level::useTextureFor(int gid)
+{
+    // TODO: cache this in a hash...hash this
+    // ---- IDEAS --- //
+    // create hash, keyed on gid
+    // contents of hash are texID, and offset/subset measurements
+    // ...that's it!
+    // ---- END IDEA ----//
+
+    TextureList::iterator t;
+    // --- find correct tileset
+    // iterate over tilesets
+    // we now have lastGID
+    for (t = textures.begin(); t != textures.end(); t++) {
+	//t->first
+	//t->second
+	if ((t->second.firstGid <= gid) && (t->second.lastGid >= gid)) {
+	    // this is the right tileset
+	    // calculate ofset
+
+	}
+    }
+
+
+    // --- calculate texture subcoords
+
+    // --- use texture with subcoords
 }
