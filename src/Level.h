@@ -20,7 +20,7 @@
  * Layer 0: Platforms - surfaces the player can walk on
  */
 
-typedef struct {
+struct LevelTexture {
     //const std::string filename;
     GLuint textureId;
     int firstGid;
@@ -29,15 +29,28 @@ typedef struct {
     int height;
     int tileWidth;
     int tileHeight;
-} LevelTexture;
+};
 
 typedef std::map<std::string, LevelTexture> TextureList;
 
+struct point {
+    GLfloat x;
+    GLfloat y;
+    GLfloat s;
+    GLfloat t;
+};
 
 class Level {
 
     GLuint vao, tex, uniTrans;
     GLuint shaderProgram;
+
+    // new vars
+    GLint attributeCoord;
+    GLint uniformTex;
+    GLint uniformColor;
+    GLuint vbo;
+    // end new vars
 
     float tileSizeX, tileSizeY;
 

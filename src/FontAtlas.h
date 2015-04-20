@@ -10,12 +10,12 @@
 #define MAXWIDTH 1024
 
 
-struct point {
-    GLfloat x;
-    GLfloat y;
-    GLfloat s;
-    GLfloat t;
-};
+//struct point {
+//    GLfloat x;
+//    GLfloat y;
+//    GLfloat s;
+//    GLfloat t;
+//};
 
 class FontAtlas {
 public:

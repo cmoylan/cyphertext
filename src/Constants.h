@@ -41,7 +41,7 @@
 #define MENU_ITEM_WIDTH 50
 #define MENU_ITEM_HEIGHT 20
 
-#define GAME_TITLE "Star Commander"
+#define GAME_TITLE "Cyphertext"
 #define BASE_SCORE_STRING "Score: "
 
 
