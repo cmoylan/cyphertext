@@ -123,15 +123,15 @@ Util::createShader(GLenum shaderType, const std::string& shaderFile)
         GLint infoLogLength;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-        printf("ERROR: unable to compile shader: %s\n", shaderSource.c_str());
+        std::vector<GLchar> errorLog(infoLogLength);
+        glGetShaderInfoLog(shader, infoLogLength, &infoLogLength, &errorLog[0]);
 
-        //GLchar *strInfoLog = newGLchar[infoLogLength + 1];
-        //glGetShaderInfoLog(shader, strInfoLog,  infoLogLength);
-        //
-        //// TODO: log to stderror
-        //printf("shader did not compile: %s - %s\n", shaderType, strInfoLog);
-        //
-        //delete[] strInfoLog;
+        printf("ERROR: unable to compile shader: %s\n", shaderSource.c_str());
+        for (int i=0; i < errorLog.size(); i++) {
+            std::cout << errorLog[i];
+        }
+
+        glDeleteShader(shader);
     }
 
     return shader;

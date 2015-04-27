@@ -48,34 +48,43 @@ void Level::render()
 {
     int c = 0;
 
-    glClear(GL_COLOR_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(shaderProgram);
     glBindVertexArray(vao);
     glBindTexture(GL_TEXTURE_2D, tex);
 
     GLfloat vertices[16];
-    vertices[c++] = -0.90;
-    vertices[c++] = -0.90;
-    vertices[c++] = 0.9;
-    vertices[c++] = -0.9;
-    vertices[c++] = 0.9;
-    vertices[c++] = 0.9;
-    vertices[c++] = -0.9;
-    vertices[c++] = 0.9;
-    vertices[c++] = 0.0f;
-    vertices[c++] = 0.0f;
-    vertices[c++] = 1.0f;
-    vertices[c++] = 0.0f;
-    vertices[c++] = 1.0f;
-    vertices[c++] = 1.0f;
-    vertices[c++] = 0.0f;
-    vertices[c++] = 1.0f;
+    vertices[c++] = 0.f;
+    vertices[c++] = 0.f;
+    vertices[c++] = -1.f;
+    vertices[c++] = 0.f;
+    vertices[c++] = -1.f;
+    vertices[c++] = -1.f;
+    vertices[c++] = 0.f;
+    vertices[c++] = -1.f;
+
+    vertices[c++] = 0.f;
+    vertices[c++] = 0.f;
+    vertices[c++] = 1.f;
+    vertices[c++] = 0.f;
+    vertices[c++] = 1.f;
+    vertices[c++] = 1.f;
+    vertices[c++] = 0.f;
+    vertices[c++] = 1.f;
 
 
     glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glDrawElements(GL_TRIANGLES, c, GL_UNSIGNED_INT, (void*)0);
+    //glMultiDrawElements(GL_TRIANGLES, c, GL_UNSIGNED_INT, (void*)0, c);
+    //glDrawElements(GL_TRIANGLES, c, GL_UNSIGNED_INT, (void*)0);
+    //glDrawArrays(GL_TRIANGLES, 0, c);
+
+    GLsizei count[] = {8, 8};
+    //GLvoid* starts[] = { (GLvoid*)0,(GLvoid*)6,(GLvoid*)11 };
+    GLvoid* indices[] = {(GLvoid*) 0, (GLvoid*) 8};
+    glMultiDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_SHORT, (const void **) indices, 2);
+
     glFlush(); // TODO: remove
 
 }
