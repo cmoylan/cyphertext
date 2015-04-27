@@ -5,7 +5,7 @@ Level::Level()
 
     tileSizeX = (2 * SCREEN_X) / TILES_ON_SCREEN_X;
     tileSizeY = (2 * SCREEN_Y) / TILES_ON_SCREEN_Y;
-
+    NumVertices = 6;
     initGL();
 }
 
@@ -16,8 +16,64 @@ Level::~Level()
 }
 
 
+void Level::initGL()
+{
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    //glGenBuffers(1, &vbo);
+    //glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glGenBuffers(NumBuffers, Buffers);
+    glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[ElementArrayBuffer]);
+
+    // TODO: move to shader object
+    shaderProgram = Util::createProgramFromShaders("src/shaders/level.v.glsl",
+                    "src/shaders/level.f.glsl");
+    glUseProgram(shaderProgram);
+
+    glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+    glEnableVertexAttribArray(vPosition);
+
+    GLuint elements[] = {
+        0, 1, 2,
+        2, 3, 0
+    };
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
+                 GL_STATIC_DRAW);
+}
+
+
+void Level::render()
+{
+    int c = 0;
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    glUseProgram(shaderProgram);
+    glBindVertexArray(vao);
+
+    GLfloat vertices[8];
+    vertices[c++] = -0.90;
+    vertices[c++] = -0.90;
+    vertices[c++] = 0.9;
+    vertices[c++] = -0.9;
+    vertices[c++] = 0.9;
+    vertices[c++] = 0.9;
+    vertices[c++] = -0.9;
+    vertices[c++] = 0.9;
+
+
+    glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    //glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawElements(GL_TRIANGLES, c, GL_UNSIGNED_INT, (void*)0);
+    glFlush(); // TODO: remove
+
+}
+
+
 void
-Level::initGL()
+Level::initGL2()
 {
     // TODO:
     // Set this up the way the demo does
@@ -75,97 +131,13 @@ Level::initGL()
 }
 
 
-bool
-Level::loadFromJson(const std::string filename)
-{
-    using namespace rapidjson;
-
-    SizeType i;
-    Document document;
-    std::string layerName;
-
-    std::string jsonString = Util::loadStringFromFile(filename);
-
-    document.Parse(jsonString.c_str());
-
-    mapWidth = document["width"].GetInt();
-    mapHeight = document["height"].GetInt();
-    tileWidth = document["tilewidth"].GetInt();
-    tileHeight = document["tileheight"].GetInt();
-
-    // TODO: possibly abstract
-    // Using a reference for consecutive access is handy and faster.
-    const Value& layers = document["layers"];
-
-    for (i = 0; i < layers.Size(); i++) {
-        layerName = layers[i]["name"].GetString();
-
-        if (layerName == "platforms") {
-            if (!setPlatforms(layers[i]["data"])) {
-                return false;
-            }
-        }
-        else if (layerName == "metadata") {
-            if (!setMetadata(layers[i]["data"])) {
-                return false;
-            }
-        }
-    }
-
-    // load sprites into textured
-    // use glTexSubImage2d to only use a portion of the texture
-    const Value& tilesets = document["tilesets"];
-    for (i = 0; i < tilesets.Size(); i++) {
-      if (!loadTileset(tilesets[i])) {
-        return false;
-      }
-    }
-
-    return true;
-}
-
-
-bool
-Level::loadTileset(const rapidjson::Value& data)
-{
-    using namespace rapidjson;
-
-    GLuint tex;
-    int firstGid, lastGid, w, h, tw, th;
-    std::string filename;
-    std::string layername;
-
-    glGenTextures(1, &tex);
-
-    filename = data["image"].GetString();
-    layername = data["name"].GetString();
-    // FIXME: test if this stuff is found...it should be there
-    //if (!filename || !layername) {
-    //	return false;
-    //}
-
-    //Util::loadTexture(tex, filename);
-
-    firstGid = data["firstgid"].GetInt();
-    w = data["imagewidth"].GetInt();
-    h = data["imageheight"].GetInt();
-    tw = data["tilewidth"].GetInt();
-    th = data["tileheight"].GetInt();
-    lastGid = firstGid + ((w / tw) * (h / th)) - 1;
-
-    LevelTexture levelTexture = { tex, firstGid, lastGid, w, h, tw, th };
-    textures[layername] = levelTexture;
-
-    return true;
-}
-
-
 void
 Level::print()
 {
     printf("----- Level Info:\n");
     printf("width: %d, height: %d\n", mapWidth, mapHeight);
     printf("tilewidth: %d, tileheight: %d\n", tileWidth, tileHeight);
+    printf("platform count: %d\n", platformCount);
 
     // ----- print out the level ----- //
     std::vector<int>::iterator p;
@@ -185,10 +157,10 @@ Level::print()
 
     // iterate over tilsets
     for (t = textures.begin(); t != textures.end(); t++) {
-	printf("\ntileset: %s \n", t->first.c_str());
-	printf("--- details: firstGID: %d lastGid: %d, w: %d, h: %d, tw: %d, th: %d\n",
-	       t->second.firstGid, t->second.lastGid, t->second.width,
-	       t->second.height, t->second.tileWidth, t->second.tileHeight);
+        printf("\ntileset: %s \n", t->first.c_str());
+        printf("--- details: firstGID: %d lastGid: %d, w: %d, h: %d, tw: %d, th: %d\n",
+               t->second.firstGid, t->second.lastGid, t->second.width,
+               t->second.height, t->second.tileWidth, t->second.tileHeight);
     }
 
     printf("\n");
@@ -196,7 +168,7 @@ Level::print()
 
 
 void
-Level::render()
+Level::render2()
 {
     // only create one shader, we will reuse it
     // textures, ideally will be atlased
@@ -219,10 +191,15 @@ Level::render()
         0, 1, 2,
         2, 3, 0
     };
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
+                 GL_STATIC_DRAW);
 
     // TODO: this is not quite correct, it includes blank spaces as well
-    point coords[4 * platforms.size()];
+    //point coords[4 * platforms.size()];
+    point coords[1] = {
+        {1.0, 1.0, 1.0, 1.0}
+    };
+
     // ----- end new code ----- //
 
     // TODO: start row at 1, remove (row+1) in glm::vec3 call
@@ -241,9 +218,9 @@ Level::render()
             //                       glm::vec3((SCALE_X * ((float) - SCREEN_X + (tileSizeX * col))),
             //                                 (SCALE_Y * ((float) SCREEN_Y - (tileSizeY * (row + 1)))),
             //                                 1.0f));
-	    //
+            //
             //uniTrans = glGetUniformLocation(shaderProgram, "trans");
-	    //
+            //
             //glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(trans));
             //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         }
@@ -258,27 +235,6 @@ Level::render()
     }
 
     Util::resetGlState();
-}
-
-
-bool
-Level::setMetadata(const rapidjson::Value& data)
-{
-    // TODO: get camera and character starting positions
-    return true;
-}
-
-
-bool
-Level::setPlatforms(const rapidjson::Value& data)
-{
-    platforms.clear();
-
-    for (int i = 0; i < data.Size(); i++) {
-        platforms.push_back(data[i].GetInt());
-    }
-
-    return true;
 }
 
 
@@ -303,13 +259,13 @@ Level::useTextureFor(int gid)
     // iterate over tilesets
     // we now have lastGID
     for (t = textures.begin(); t != textures.end(); t++) {
-	//t->first
-	//t->second
-	if ((t->second.firstGid <= gid) && (t->second.lastGid >= gid)) {
-	    // this is the right tileset
-	    // calculate ofset
+        //t->first
+        //t->second
+        if ((t->second.firstGid <= gid) && (t->second.lastGid >= gid)) {
+            // this is the right tileset
+            // calculate ofset
 
-	}
+        }
     }
 
 

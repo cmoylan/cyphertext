@@ -14,6 +14,7 @@
 
 namespace Util
 {
+    void checkGLError();
 
     void createAndBindContext(GLuint* vao);
 

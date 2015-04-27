@@ -1,9 +1,9 @@
-#version 150 core
+#version 430 core
 
-in vec4 coord;
-out vec2 Texcoord;
+layout(location = 0) in vec4 vPosition;
 
-void main() {
-  gl_Position = vec4(coord.xy, 0.0, 1.0);
-  Texcoord = coord.zw;
+void
+main()
+{
+    gl_Position = vPosition;
 }

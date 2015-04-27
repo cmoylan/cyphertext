@@ -8,6 +8,7 @@ OBJS = src/Util.cpp \
 	src/EnemyAI.cpp src/CollisionManager.cpp \
 	src/Background.cpp \
 	src/Level.cpp \
+	src/LevelLoader.cpp \
 	src/GameUtil.cpp \
 	src/GameInput.cpp \
 	src/Game.cpp \

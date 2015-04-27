@@ -82,7 +82,7 @@ Game::render()
 
     // Render each component on the scree
     level->render();
-    //character->render();
+    character->render();
     //enemy->render();
     //BulletRegistry::getInstance().render();
 

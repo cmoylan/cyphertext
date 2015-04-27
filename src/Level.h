@@ -14,11 +14,19 @@
 #include "Shader.h"
 #include "Util.h"
 
+#define BUFFER_OFFSET(offset) ((void *)(offset))
+
 //using namespace rapidjson;
 /**
  * TMX Subset:
  * Layer 0: Platforms - surfaces the player can walk on
  */
+
+
+struct Layer {
+    int tileCount;
+    std::vector<int> tiles;
+};
 
 struct LevelTexture {
     //const std::string filename;
@@ -32,6 +40,7 @@ struct LevelTexture {
 };
 
 typedef std::map<std::string, LevelTexture> TextureList;
+typedef std::map<std::string, Layer> LayerList;
 
 struct point {
     GLfloat x;
@@ -54,6 +63,15 @@ class Level {
 
     float tileSizeX, tileSizeY;
 
+
+
+    enum VAO_IDs { Triangles, NumVAOs };
+    enum Buffer_IDs { ArrayBuffer, ElementArrayBuffer, NumBuffers };
+    enum Attrib_IDs { vPosition = 0 };
+    GLuint VAOs[NumVAOs];
+    GLuint Buffers[NumBuffers];
+    GLuint NumVertices;
+
 public:
     int mapWidth;
     int mapHeight;
@@ -61,7 +79,11 @@ public:
     int tileHeight;
     Vector2D camera;
 
+
     std::vector<int> platforms;
+    int platformCount;
+
+    LayerList layers;
     TextureList textures;
 
 
@@ -69,6 +91,7 @@ public:
     ~Level();
 
     void initGL();
+    void initGL2();
 
     bool loadFromJson(const std::string filename);
     bool loadTileset(const rapidjson::Value& data);
@@ -76,6 +99,7 @@ public:
     bool setMetadata(const rapidjson::Value& data);
 
     void render();
+    void render2();
 
     /**
      * Sets the correct texture for the given GID

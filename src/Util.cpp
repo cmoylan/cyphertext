@@ -1,6 +1,20 @@
 #include "Util.h"
 
 
+// TODO: doesn't work...
+void
+Util::checkGLError()
+{
+    printf("*");
+
+    GLenum err;
+    while ((err = glGetError()) != GL_NO_ERROR) {
+        //printf("OpenGL error: %s\n", err);
+        //printf("got the error\n");
+        std::cout << err << std::endl;
+    }
+}
+
 void
 Util::createAndBindContext(GLuint* vao)
 {
@@ -58,7 +72,7 @@ Util::createProgramFromShaders(std::string vertexFile,
     if (!vertexFile.empty()) {
         shader = createShader(GL_VERTEX_SHADER, vertexFile);
         if (!shader) {
-            printf("shader didn't compile!\n");
+            printf("Util: shader didn't compile!\n");
             return 0;
         }
         else {
@@ -69,7 +83,7 @@ Util::createProgramFromShaders(std::string vertexFile,
     if (!fragmentFile.empty()) {
         shader = createShader(GL_FRAGMENT_SHADER, fragmentFile);
         if (!shader) {
-            printf("shader didn't compile!\n");
+            printf("Util: shader didn't compile!\n");
             return 0;
         }
         else {
@@ -80,7 +94,8 @@ Util::createProgramFromShaders(std::string vertexFile,
     glLinkProgram(program);
     glGetProgramiv(program, GL_LINK_STATUS, &linkOk);
     if (!linkOk) {
-        printf("program did not link\n");
+        printf("Util: program did not link\n");
+        // check OpenGL error
         glDeleteProgram(program);
     }
 
