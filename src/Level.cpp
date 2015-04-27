@@ -7,6 +7,10 @@ Level::Level()
     tileSizeY = (2 * SCREEN_Y) / TILES_ON_SCREEN_Y;
     NumVertices = 6;
     initGL();
+
+    // TODO: temp
+    glGenTextures(1, &tex);
+    Util::loadTexture(tex, "res/red-blue-square.png");
 }
 
 
@@ -26,6 +30,10 @@ void Level::initGL()
     glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[ElementArrayBuffer]);
 
+    GLuint elements[] = { 0, 1, 2, 2, 3, 0 };
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
+                 GL_STATIC_DRAW);
+
     // TODO: move to shader object
     shaderProgram = Util::createProgramFromShaders("src/shaders/level.v.glsl",
                     "src/shaders/level.f.glsl");
@@ -33,13 +41,6 @@ void Level::initGL()
 
     glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
     glEnableVertexAttribArray(vPosition);
-
-    GLuint elements[] = {
-        0, 1, 2,
-        2, 3, 0
-    };
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
-                 GL_STATIC_DRAW);
 }
 
 
@@ -50,8 +51,9 @@ void Level::render()
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(shaderProgram);
     glBindVertexArray(vao);
+    glBindTexture(GL_TEXTURE_2D, tex);
 
-    GLfloat vertices[8];
+    GLfloat vertices[16];
     vertices[c++] = -0.90;
     vertices[c++] = -0.90;
     vertices[c++] = 0.9;
@@ -60,12 +62,19 @@ void Level::render()
     vertices[c++] = 0.9;
     vertices[c++] = -0.9;
     vertices[c++] = 0.9;
+    vertices[c++] = 0.0f;
+    vertices[c++] = 0.0f;
+    vertices[c++] = 1.0f;
+    vertices[c++] = 0.0f;
+    vertices[c++] = 1.0f;
+    vertices[c++] = 1.0f;
+    vertices[c++] = 0.0f;
+    vertices[c++] = 1.0f;
 
 
     glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    //glDrawArrays(GL_TRIANGLES, 0, 6);
     glDrawElements(GL_TRIANGLES, c, GL_UNSIGNED_INT, (void*)0);
     glFlush(); // TODO: remove
 
