@@ -30,9 +30,9 @@ void Level::initGL()
     glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[ElementArrayBuffer]);
 
-    GLuint elements[] = { 0, 1, 2, 2, 3, 0 };
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
-                 GL_STATIC_DRAW);
+    //GLuint elements[] = { 0, 1, 2, 2, 3, 0 };
+    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
+    //             GL_STATIC_DRAW);
 
     // TODO: move to shader object
     shaderProgram = Util::createProgramFromShaders("src/shaders/level.v.glsl",
@@ -76,14 +76,15 @@ void Level::render()
     glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    //glMultiDrawElements(GL_TRIANGLES, c, GL_UNSIGNED_INT, (void*)0, c);
-    //glDrawElements(GL_TRIANGLES, c, GL_UNSIGNED_INT, (void*)0);
-    //glDrawArrays(GL_TRIANGLES, 0, c);
+    // need to set indexes for each quad we want to render
+    GLuint elements[] = { 0, 1, 2, 2, 3, 0, 
+                          4, 5, 6, 6, 7, 4 };
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[ElementArrayBuffer]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
+                 GL_STATIC_DRAW);
 
-    GLsizei count[] = {8, 8};
-    //GLvoid* starts[] = { (GLvoid*)0,(GLvoid*)6,(GLvoid*)11 };
-    GLvoid* indices[] = {(GLvoid*) 0, (GLvoid*) 8};
-    glMultiDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_SHORT, (const void **) indices, 2);
+    glDrawElements(GL_TRIANGLES, c, GL_UNSIGNED_INT, NULL); //(void*)0);
+    //glDrawArrays(GL_TRIANGLES, 0, c);
 
     glFlush(); // TODO: remove
 
