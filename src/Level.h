@@ -67,7 +67,7 @@ class Level {
 
     enum VAO_IDs { Triangles, NumVAOs };
     enum Buffer_IDs { ArrayBuffer, ElementArrayBuffer, NumBuffers };
-    enum Attrib_IDs { vPosition = 0 };
+    enum Attrib_IDs { vPosition = 0, vTexPosition = 0 };
     GLuint VAOs[NumVAOs];
     GLuint Buffers[NumBuffers];
     GLuint NumVertices;
