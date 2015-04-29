@@ -127,7 +127,7 @@ Util::createShader(GLenum shaderType, const std::string& shaderFile)
         glGetShaderInfoLog(shader, infoLogLength, &infoLogLength, &errorLog[0]);
 
         printf("ERROR: unable to compile shader: %s\n", shaderSource.c_str());
-        for (int i=0; i < errorLog.size(); i++) {
+        for (int i = 0; i < errorLog.size(); i++) {
             std::cout << errorLog[i];
         }
 

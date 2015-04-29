@@ -24,19 +24,11 @@ void Level::initGL()
 {
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
-    //glGenBuffers(1, &vbo);
-    //glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
     glGenBuffers(NumBuffers, Buffers);
     glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[ElementArrayBuffer]);
-    
-    //GLint texAttrib = glGetAttribLocation(shaderProgram, "texcoord");
-    //glEnableVertexAttribArray(texAttrib);
-    // the texcoords are tightly packed after the verticies in the array
-    // TODO: you can remove this and go a different route
-    //glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 0,
-     //                     (void*)(8 * sizeof(float)));
-    
+
     // TODO: move to shader object
     shaderProgram = Util::createProgramFromShaders("src/shaders/level.v.glsl",
                     "src/shaders/level.f.glsl");
@@ -44,10 +36,10 @@ void Level::initGL()
 
     glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
     glEnableVertexAttribArray(vPosition);
-    
+
      GLint vTexPosition = glGetAttribLocation(shaderProgram, "vTexPosition");
      glVertexAttribPointer(vTexPosition, 2, GL_FLOAT, GL_FALSE, 0,
-                          (void*)(8 * sizeof(float)));
+                          BUFFER_OFFSET(8 * sizeof(float)));
      glEnableVertexAttribArray(vTexPosition);
 }
 
@@ -70,45 +62,49 @@ void Level::render()
     vertices[c++] = -1.f;
     vertices[c++] = 0.f;
     vertices[c++] = -1.f;
-    
+
     // second quad
-      vertices[c++] = 0.0f;
-      vertices[c++] = 0.0f;
-      vertices[c++] = 0.5f;
-      vertices[c++] = 0.0f;
-      vertices[c++] = 0.5f;
-      vertices[c++] = 0.5f;
-      vertices[c++] = 0.0f; 
-      vertices[c++] = 0.5f;
-    
+    vertices[c++] = 0.0f;
+    vertices[c++] = 0.0f;
+    vertices[c++] = 0.5f;
+    vertices[c++] = 0.0f;
+    vertices[c++] = 0.5f;
+    vertices[c++] = 0.5f;
+    vertices[c++] = 0.0f;
+    vertices[c++] = 0.5f;
+
+    //0.0f, 0.0f,
+    //1.0f, 0.0f,
+    //1.0f, 1.0f,
+    //0.0f, 1.0f
+
       // first texture
-    vertices[c++] = 1.f;
-    vertices[c++] = 1.f;
-    vertices[c++] = 0.f;
-    vertices[c++] = 0.f;
     vertices[c++] = 0.f;
     vertices[c++] = 0.f;
     vertices[c++] = 1.f;
+    vertices[c++] = 0.f;
+    vertices[c++] = 1.f;
+    vertices[c++] = 1.f;
+    vertices[c++] = 0.f;
     vertices[c++] = 1.f;
 
-        // second texture
-       vertices[c++] = 0.0f;
-       vertices[c++] = 0.0f;
-       vertices[c++] = 1.0f;
-       vertices[c++] = 0.0f;
-       vertices[c++] = 1.0f;
-       vertices[c++] = 1.0f;
-       vertices[c++] = 0.0f; 
-       vertices[c++] = 1.0f;
+     // second texture
+    vertices[c++] = 0.0f;
+    vertices[c++] = 0.0f;
+    vertices[c++] = 1.0f;
+    vertices[c++] = 0.0f;
+    vertices[c++] = 1.0f;
+    vertices[c++] = 1.0f;
+    vertices[c++] = 0.0f;
+    vertices[c++] = 1.0f;
 
     glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // need to set indexes for each quad we want to render
-    GLuint elements[] = { 0, 1, 2, 2, 3, 0, 
+    GLuint elements[] = { 0, 1, 2, 2, 3, 0,
                           4, 5, 6, 6, 7, 4
-
-    };
+                        };
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[ElementArrayBuffer]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
                  GL_STATIC_DRAW);
