@@ -45,9 +45,14 @@ typedef std::map<std::string, Layer> LayerList;
 struct point {
     GLfloat x;
     GLfloat y;
-    GLfloat s;
-    GLfloat t;
 };
+
+//struct LevelVertex {
+//    GLfloat x;
+//    GLflost y;
+//    GLfloat tx;
+//    GLfloat ty;
+//};
 
 class Level {
 

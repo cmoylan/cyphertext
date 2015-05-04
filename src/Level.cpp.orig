@@ -37,16 +37,31 @@ Level::initGL()
                     "src/shaders/level.f.glsl");
     glUseProgram(shaderProgram);
 
-    glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float),
+    glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat),
                           BUFFER_OFFSET(0));
     glEnableVertexAttribArray(vPosition);
 
     GLint vTexPosition = glGetAttribLocation(shaderProgram, "vTexPosition");
-    glVertexAttribPointer(vTexPosition, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float),
-                          BUFFER_OFFSET(2 * sizeof(float)));
+    glVertexAttribPointer(vTexPosition, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat),
+                          BUFFER_OFFSET(2 * sizeof(GLfloat)));
     glEnableVertexAttribArray(vTexPosition);
 
-    //Util::resetGlState();
+    // TODO: set up the index buffer here. The size of it will be
+    //       tiles_on_screen_x * tiles_on_screen_y * 6
+    //GLuint elements[] = { 0, 1, 2, 2, 3, 0,
+    //                      4, 5, 6, 6, 7, 4
+    //                    };
+    // and then populate the index buffer here
+    elementCount = TILES_ON_SCREEN_X * TILES_ON_SCREEN_Y;
+    GLfloat elements[elementCount * 6];
+    for (e = 0, i=0; e <= elementCount; e++) {
+	elements[i++] = e; // 0
+	elements[i++] = e+1; // 1
+	elements[i++] = e+2; // 2
+	elements[i++] = e+2; // 2
+	elements[i++] = e+3; // 3
+	elements[i++] = e; // 0
+    }
 }
 
 
@@ -71,7 +86,9 @@ Level::render()
     // TODO: this will be tile count * vertex data
     // right now this is too big because we don't need to send vertex
     // data for empty tiles
-    GLfloat vertices[24];//platforms.size() * 8];
+    GLfloat vertices[platforms.size() * 8];
+    // this is also too big
+    GLfloat elements[platforms.size() * 6];
 
     // main loop to set up vertex data for a tile layer
     row = 0;
@@ -90,99 +107,67 @@ Level::render()
             row++;
         }
     }
-    // tl, tr, br, bl
+
     //vertex
-    vertices[c++] = -1.f; // 0
     vertices[c++] = 0.f;
-    vertices[c++] = 0.f; // texcoord
-    vertices[c++] = 1.f;
-
-    vertices[c++] = 0.f; //1
     vertices[c++] = 0.f;
-    vertices[c++] = 1.f; // texcoord
-    vertices[c++] = 1.f;
-
-    vertices[c++] = -1.f; //2
+    // texture
+    vertices[c++] = 0.f;
+    vertices[c++] = 0.f;
+    //vertex
     vertices[c++] = -1.f;
-    vertices[c++] = 0.f; // texcoord
     vertices[c++] = 0.f;
-
-    // second triangle
-    vertices[c++] = 0.f; // 0
-    vertices[c++] = 0.f;
-    vertices[c++] = 1.f; // texcoords
+    //texture
     vertices[c++] = 1.f;
-
-    vertices[c++] = 0.f; // 1
-    vertices[c++] = -1.f;
-    vertices[c++] = 1.f; // texcoord
     vertices[c++] = 0.f;
-
-    vertices[c++] = -1.f; // 3
+    //vertex
     vertices[c++] = -1.f;
-    vertices[c++] = 0.f; // texcoord
+    vertices[c++] = -1.f;
+    //texture
+    vertices[c++] = 1.f;
+    vertices[c++] = 1.f;
+    //vertex
     vertices[c++] = 0.f;
-
-    //vertices[c++] = 0.f; //3
-    //vertices[c++] = -1.f;
-
-    //vertices[c++] = 0.f; //0
-    //vertices[c++] = 0.f;
-
-    ////texture
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 1.f;
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 1.f;
-    //vertices[c++] = 1.f;
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 1.f;
-
-//1.0, 1.0, 
-//0.0, 1.0, 
-//0.0, 0.0, 
-//0.0, 0.0, 
-//1.0, 0.0, 
-//1.0, 1.0 };
-
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 1.f;
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 1.f;
-    //vertices[c++] = 1.f;
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 1.f;
+    vertices[c++] = -1.f;
+    //texture
+    vertices[c++] = 0.f;
+    vertices[c++] = 1.f;
 
 
     // second quad
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 0.5f;
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 0.5f;
-    //vertices[c++] = 0.5f;
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 0.5f;
-    //
-    ////texture
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 1.0f;
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 1.0f;
-    //vertices[c++] = 1.0f;
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 1.0f;
+    vertices[c++] = 0.0f;
+    vertices[c++] = 0.0f;
+    //texture
+    vertices[c++] = 0.0f;
+    vertices[c++] = 0.0f;
 
+    vertices[c++] = 0.5f;
+    vertices[c++] = 0.0f;
+    //texture
+    vertices[c++] = 1.0f;
+    vertices[c++] = 0.0f;
+
+    vertices[c++] = 0.5f;
+    vertices[c++] = 0.5f;
+    //texture
+    vertices[c++] = 1.0f;
+    vertices[c++] = 1.0f;
+
+    vertices[c++] = 0.0f;
+    vertices[c++] = 0.5f;
+    //texture
+    vertices[c++] = 0.0f;
+    vertices[c++] = 1.0f;
 
 
     glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    //glDrawElements(GL_TRIANGLES, c, GL_UNSIGNED_INT, NULL); //(void*)0);
-    glDrawArrays(GL_TRIANGLES, 0, (c/4));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[ElementArrayBuffer]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
+                 GL_STATIC_DRAW);
+
+    glDrawElements(GL_TRIANGLES, c, GL_UNSIGNED_INT, NULL); //(void*)0);
 
     glFlush(); // TODO: remove
 

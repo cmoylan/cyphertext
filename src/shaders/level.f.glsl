@@ -9,6 +9,6 @@ out vec4 outColor;
 void
 main()
 {
-    //outColor = vec4(fTexPosition.xy, 1.0, 1.0);
-    outColor = texture(tex, fTexPosition);
+   //outColor = vec4(1.0, 0.0, 1.0, 1.0);
+   outColor = texture(tex, fTexPosition);
 }
