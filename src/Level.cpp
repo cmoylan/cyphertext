@@ -86,9 +86,9 @@ Level::render()
             transformX = SCALE_X * (float)(tileSizeX * col);
             transformY = SCALE_Y * (float)(tileSizeY * row);
             //printf("col: %d, val: %f ", col, transformX);
-	    // NOTE: the y axis has to be inverted because the level is stored
-	    //       from top to bottom in the tmx format
-	    //vertex
+            // NOTE: the y axis has to be inverted because the level is stored
+            //       from top to bottom in the tmx format
+            //vertex
             vertices[c++] = bl.x + transformX; // 0
             vertices[c++] = -1.f * (bl.y + transformY);
             vertices[c++] = 0.f; // texcoord

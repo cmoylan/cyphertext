@@ -24,7 +24,7 @@ Shader::~Shader()
 
 
 GLuint
-Shader::get(const std::string name)
+Shader::get(const std::string& name)
 {
     ShaderList::iterator program;
 
@@ -41,9 +41,9 @@ Shader::get(const std::string name)
 
 
 GLuint
-Shader::set(const std::string name,
-            const std::string vertexSrc,
-            const std::string fragmentSrc)
+Shader::set(const std::string& name,
+            const std::string& vertexSrc,
+            const std::string& fragmentSrc)
 {
     GLuint program;
 
@@ -55,7 +55,7 @@ Shader::set(const std::string name,
 
 
 void
-Shader::use(const std::string name)
+Shader::use(const std::string& name)
 {
     GLuint program = get(name);
 

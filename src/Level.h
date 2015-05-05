@@ -98,7 +98,7 @@ public:
     void initGL();
     void initGL2();
 
-    bool loadFromJson(const std::string filename);
+    bool loadFromJson(const std::string& filename);
     bool loadTileset(const rapidjson::Value& data);
     bool setPlatforms(const rapidjson::Value& data);
     bool setMetadata(const rapidjson::Value& data);

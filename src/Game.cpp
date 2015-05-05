@@ -99,13 +99,14 @@ Game::scoreDisplay()
 {
     // color of the font
     GLfloat green[4] = {0, 1, 0, 1};
-    GLfloat red[4] = { 1, 0, 0, 1 };
+    //GLfloat red[4] = { 1, 0, 0, 1 };
 
     //TextRenderer::getInstance()->renderTextDefaultScale(scoreString,
     //                                        -1 + 375,   1 - 25,
     //                                        green, 32);
-    float textScaleX = 2.0f / WINDOW_WIDTH;
-    float textScaleY = 2.0f / WINDOW_HEIGHT;
+    // NOTE: these are useful but not used
+    //float textScaleX = 2.0f / WINDOW_WIDTH;
+    //float textScaleY = 2.0f / WINDOW_HEIGHT;
     //printf("text scale %f\n", textScaleX);
     TextRenderer::getInstance()->renderTextDefaultScale(scoreString,
             375, 25,

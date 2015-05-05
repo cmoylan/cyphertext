@@ -146,6 +146,7 @@ BulletRegistry::remove(std::vector<Bullet>::iterator position)
 }
 
 
+// TODO: refactor to send vertex data in bulk
 void
 BulletRegistry::render()
 {
@@ -158,7 +159,7 @@ BulletRegistry::render()
     glUseProgram(shaderProgram);
     glBindVertexArray(vao);
 
-    for (bullet = bullets.begin(); bullet != bullets.end(); bullet++) {
+    for (bullet = bullets.begin(); bullet != bullets.end(); ++bullet) {
         //printf("rendering at: [%d, %d]\n", bullet->element.origin);
         // color
         glUniform3f(uniColor, 1.0f, 0.0f, 0.0f);

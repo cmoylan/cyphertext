@@ -1,7 +1,7 @@
 #include "Level.h"
 
 bool
-Level::loadFromJson(const std::string filename)
+Level::loadFromJson(const std::string& filename)
 {
     using namespace rapidjson;
 

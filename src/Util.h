@@ -30,10 +30,10 @@ namespace Util
     void loadTexture(GLuint buffer, const std::string& filename);
 
     void mapPositionAttribute(GLuint program,
-                              const std::string name = "position");
+                              const std::string& name = "position");
 
     void mapTextureAttribute(GLuint program,
-                             const std::string name = "texcoord");
+                             const std::string& name = "texcoord");
 
     /**
     * Reset OpenGL state machine

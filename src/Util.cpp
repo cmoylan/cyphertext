@@ -127,7 +127,7 @@ Util::createShader(GLenum shaderType, const std::string& shaderFile)
         glGetShaderInfoLog(shader, infoLogLength, &infoLogLength, &errorLog[0]);
 
         printf("ERROR: unable to compile shader: %s\n", shaderSource.c_str());
-        for (int i = 0; i < errorLog.size(); i++) {
+        for (size_t i = 0; i < errorLog.size(); i++) {
             std::cout << errorLog[i];
         }
 
@@ -190,7 +190,7 @@ Util::loadTexture(GLuint buffer, const std::string& filename)
 
 
 void
-Util::mapPositionAttribute(GLuint program, const std::string name)
+Util::mapPositionAttribute(GLuint program, const std::string& name)
 {
     // TODO: error handing and return bool
     GLint posAttrib = glGetAttribLocation(program, name.c_str());
@@ -200,7 +200,7 @@ Util::mapPositionAttribute(GLuint program, const std::string name)
 
 
 void
-Util::mapTextureAttribute(GLuint program, const std::string name)
+Util::mapTextureAttribute(GLuint program, const std::string& name)
 {
     // TODO: error handling and return bool
     // texture position

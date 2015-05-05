@@ -20,15 +20,15 @@ public:
         return &instance;
     }
 
-    GLuint get(const std::string name);
+    GLuint get(const std::string& name);
 
-    void use(const std::string name);
+    void use(const std::string& name);
 
 private:
 
-    GLuint set(const std::string name,
-               const std::string vertexSrc,
-               const std::string fragmentSrc);
+    GLuint set(const std::string& name,
+               const std::string& vertexSrc,
+               const std::string& fragmentSrc);
 
     // --- Singleton things
     Shader(); // Don't implement

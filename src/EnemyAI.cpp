@@ -76,17 +76,13 @@ EnemyAI::tick(int ticks)
     //if (ticks != 0) { return; }
 
     std::vector<EnemyStateMachine>::iterator sm;
-    Enemy* enemy;
-    Vector2D direction;
-    int random;
-
     //printf("rand is %d\n", random);
 
     for (sm = enemies.begin(); sm != enemies.end(); ++sm) {
-        enemy = sm->enemy;
-        direction = sm->direction;
+        Enemy *enemy = sm->enemy;
+        Vector2D direction = sm->direction;
         // rand() % (HIGH - LOW + 1) + LOW;
-        random = rand() % (100 - 0 + 1);
+        int random = rand() % (100 - 0 + 1);
         //random = distribution(generator);
 
         avoidBullets(sm);
