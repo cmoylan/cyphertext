@@ -37,12 +37,12 @@ Level::initGL()
                     "src/shaders/level.f.glsl");
     glUseProgram(shaderProgram);
 
-    glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float),
+    glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
                           BUFFER_OFFSET(0));
     glEnableVertexAttribArray(vPosition);
 
     GLint vTexPosition = glGetAttribLocation(shaderProgram, "vTexPosition");
-    glVertexAttribPointer(vTexPosition, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float),
+    glVertexAttribPointer(vTexPosition, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
                           BUFFER_OFFSET(2 * sizeof(float)));
     glEnableVertexAttribArray(vTexPosition);
 
@@ -56,13 +56,14 @@ Level::render()
     int c = 0;
     int i, row, col;
     std::vector<int>::iterator p;
+    float transformX, transformY;
 
     // TODO: only need to do this once
     point tl, tr, bl, br;
-    tl = { 0.f, (SCALE_Y * tileSizeY) };
-    tr = { (SCALE_X * tileSizeX), (SCALE_Y * tileSizeY) };
-    br = { (SCALE_X * tileSizeX), 0.f };
-    bl = { 0.f, 0.f };
+    tl = { -1.f, (SCALE_Y * tileSizeY) - 1.f};
+    tr = { (SCALE_X * tileSizeX) - 1.f, (SCALE_Y * tileSizeY) - 1.f };
+    br = { (SCALE_X * tileSizeX) - 1.f, -1.f };
+    bl = { -1.f, -1.f };
 
     glUseProgram(shaderProgram);
     glBindVertexArray(vao);
@@ -71,7 +72,7 @@ Level::render()
     // TODO: this will be tile count * vertex data
     // right now this is too big because we don't need to send vertex
     // data for empty tiles
-    GLfloat vertices[24];//platforms.size() * 8];
+    GLfloat vertices[platforms.size() * 8];
 
     // main loop to set up vertex data for a tile layer
     row = 0;
@@ -79,7 +80,45 @@ Level::render()
     // TODO: should change the naming here to tiles rather than platforms
     for (p = platforms.begin(), i = 0; p != platforms.end(); p++, i++) {
         if (*p != 0) {
-            // add it to the vertex data
+            // bl, tl, tr, br
+            //((SCALE_X * ((float) - SCREEN_X + (tileSizeX * col))),
+            //(SCALE_Y * ((float) SCREEN_Y - (tileSizeY * (row + 1)))),
+            transformX = SCALE_X * (float)(tileSizeX * col);
+            transformY = SCALE_Y * (float)(tileSizeY * row);
+            //printf("col: %d, val: %f ", col, transformX);
+	    // NOTE: the y axis has to be inverted because the level is stored
+	    //       from top to bottom in the tmx format
+	    //vertex
+            vertices[c++] = bl.x + transformX; // 0
+            vertices[c++] = -1.f * (bl.y + transformY);
+            vertices[c++] = 0.f; // texcoord
+            vertices[c++] = 1.f;
+
+            vertices[c++] = tl.x + transformX; //1
+            vertices[c++] = -1.f * (tl.y + transformY);
+            vertices[c++] = 0.f; // texcoord
+            vertices[c++] = 0.f;
+
+            vertices[c++] = tr.x + transformX; //2
+            vertices[c++] = -1.f * (tr.y + transformY);
+            vertices[c++] = 1.f; // texcoord
+            vertices[c++] = 0.f;
+
+            // second triangle
+            vertices[c++] = bl.x + transformX; // 0
+            vertices[c++] = -1.f * (bl.y + transformY);
+            vertices[c++] = 0.f; // texcoord
+            vertices[c++] = 1.f;
+
+            vertices[c++] = tr.x + transformX; // 2
+            vertices[c++] = -1.f * (tr.y + transformY);
+            vertices[c++] = 1.f;
+            vertices[c++] = 0.f;
+
+            vertices[c++] = br.x + transformX; // 3
+            vertices[c++] = -1.f * (br.y + transformY);
+            vertices[c++] = 1.f;
+            vertices[c++] = 1.f;
         }
 
         if (col < (TILES_ON_SCREEN_X - 1)) {
@@ -90,46 +129,13 @@ Level::render()
             row++;
         }
     }
-    // bl, tl, tr, br
-    //vertex
-    vertices[c++] = -1.f; // 0
-    vertices[c++] = -1.f;
-    vertices[c++] = 0.f; // texcoord
-    vertices[c++] = 1.f;
-
-    vertices[c++] = -1.f; //1
-    vertices[c++] = 0.f;
-    vertices[c++] = 0.f; // texcoord
-    vertices[c++] = 0.f;
-
-    vertices[c++] = 0.f; //2
-    vertices[c++] = 0.f;
-    vertices[c++] = 1.f; // texcoord
-    vertices[c++] = 0.f;
-
-    // second triangle
-    vertices[c++] = -1.f; // 0
-    vertices[c++] = -1.f;
-    vertices[c++] = 0.f; // texcoord
-    vertices[c++] = 1.f;
-
-    vertices[c++] = 0.f; // 2
-    vertices[c++] = 0.f;
-    vertices[c++] = 1.f;
-    vertices[c++] = 0.f;
-
-    vertices[c++] = 0.f; // 3
-    vertices[c++] = -1.f;
-    vertices[c++] = 1.f;
-    vertices[c++] = 1.f;
 
     glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    //glDrawElements(GL_TRIANGLES, c, GL_UNSIGNED_INT, NULL); //(void*)0);
-    glDrawArrays(GL_TRIANGLES, 0, c/4);
+    glDrawArrays(GL_TRIANGLES, 0, c / 4);
 
-    glFlush(); // TODO: remove
+    //glFlush(); // TODO: remove
 
 }
 
