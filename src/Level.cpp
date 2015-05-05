@@ -90,99 +90,44 @@ Level::render()
             row++;
         }
     }
-    // tl, tr, br, bl
+    // bl, tl, tr, br
     //vertex
     vertices[c++] = -1.f; // 0
-    vertices[c++] = 0.f;
-    vertices[c++] = 0.f; // texcoord
-    vertices[c++] = 1.f;
-
-    vertices[c++] = 0.f; //1
-    vertices[c++] = 0.f;
-    vertices[c++] = 1.f; // texcoord
-    vertices[c++] = 1.f;
-
-    vertices[c++] = -1.f; //2
     vertices[c++] = -1.f;
     vertices[c++] = 0.f; // texcoord
+    vertices[c++] = 1.f;
+
+    vertices[c++] = -1.f; //1
+    vertices[c++] = 0.f;
+    vertices[c++] = 0.f; // texcoord
+    vertices[c++] = 0.f;
+
+    vertices[c++] = 0.f; //2
+    vertices[c++] = 0.f;
+    vertices[c++] = 1.f; // texcoord
     vertices[c++] = 0.f;
 
     // second triangle
-    vertices[c++] = 0.f; // 0
-    vertices[c++] = 0.f;
-    vertices[c++] = 1.f; // texcoords
-    vertices[c++] = 1.f;
-
-    vertices[c++] = 0.f; // 1
-    vertices[c++] = -1.f;
-    vertices[c++] = 1.f; // texcoord
-    vertices[c++] = 0.f;
-
-    vertices[c++] = -1.f; // 3
+    vertices[c++] = -1.f; // 0
     vertices[c++] = -1.f;
     vertices[c++] = 0.f; // texcoord
+    vertices[c++] = 1.f;
+
+    vertices[c++] = 0.f; // 2
+    vertices[c++] = 0.f;
+    vertices[c++] = 1.f;
     vertices[c++] = 0.f;
 
-    //vertices[c++] = 0.f; //3
-    //vertices[c++] = -1.f;
-
-    //vertices[c++] = 0.f; //0
-    //vertices[c++] = 0.f;
-
-    ////texture
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 1.f;
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 1.f;
-    //vertices[c++] = 1.f;
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 1.f;
-
-//1.0, 1.0, 
-//0.0, 1.0, 
-//0.0, 0.0, 
-//0.0, 0.0, 
-//1.0, 0.0, 
-//1.0, 1.0 };
-
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 1.f;
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 1.f;
-    //vertices[c++] = 1.f;
-    //vertices[c++] = 0.f;
-    //vertices[c++] = 1.f;
-
-
-    // second quad
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 0.5f;
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 0.5f;
-    //vertices[c++] = 0.5f;
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 0.5f;
-    //
-    ////texture
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 1.0f;
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 1.0f;
-    //vertices[c++] = 1.0f;
-    //vertices[c++] = 0.0f;
-    //vertices[c++] = 1.0f;
-
-
+    vertices[c++] = 0.f; // 3
+    vertices[c++] = -1.f;
+    vertices[c++] = 1.f;
+    vertices[c++] = 1.f;
 
     glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     //glDrawElements(GL_TRIANGLES, c, GL_UNSIGNED_INT, NULL); //(void*)0);
-    glDrawArrays(GL_TRIANGLES, 0, (c/4));
+    glDrawArrays(GL_TRIANGLES, 0, c/4);
 
     glFlush(); // TODO: remove
 
