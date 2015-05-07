@@ -46,7 +46,7 @@ Level::initGL()
                           BUFFER_OFFSET(2 * sizeof(float)));
     glEnableVertexAttribArray(vTexPosition);
 
-    //Util::resetGlState();
+    Util::resetGlState();
 }
 
 
@@ -78,7 +78,7 @@ Level::render()
     row = 0;
     col = 0;
     // TODO: should change the naming here to tiles rather than platforms
-    for (p = platforms.begin(), i = 0; p != platforms.end(); p++, i++) {
+    for (p = platforms.begin(), i = 0; p != platforms.end(); ++p, ++i) {
         if (*p != 0) {
             // bl, tl, tr, br
             //((SCALE_X * ((float) - SCREEN_X + (tileSizeX * col))),
@@ -141,65 +141,6 @@ Level::render()
 
 
 void
-Level::initGL2()
-{
-    // TODO:
-    // Set this up the way the demo does
-    // Send the vertex + texcoord data during render
-    //Util::createAndBindContext(&vao);
-
-    glGenTextures(1, &tex);
-    Util::loadTexture(tex, "res/red-blue-square.png");
-
-    // ----- new code ----- //
-    shaderProgram = Shader::getInstance()->get("level");
-    // TODO: make sure none of these is -1
-    attributeCoord = glGetAttribLocation(shaderProgram, "coord");
-    uniformTex = glGetUniformLocation(shaderProgram, "tex");
-    uniformColor = glGetUniformLocation(shaderProgram, "color");
-
-    glGenBuffers(1, &vbo);
-    // ----- end new code ----- //
-
-    //glUseProgram(shaderProgram);
-
-    //Util::mapPositionAttribute(shaderProgram);
-    // TODO: change this
-    //Util::mapTextureAttribute(shaderProgram);
-
-    // translation attr from vector shader
-    //uniTrans = glGetUniformLocation(shaderProgram, "trans");
-
-    // --- send initial data to the shader
-    // TODO: centralize elements[]
-    //GLuint elements[] = {
-    //    0, 1, 2,
-    //    2, 3, 0
-    //};
-    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements),
-    //             elements, GL_STATIC_DRAW);
-
-    // TODO: scaling magic
-    //GLfloat vertices[] = {
-    //    0.f, (SCALE_Y * tileSizeY), // top left
-    //    (SCALE_X * tileSizeX), (SCALE_Y * tileSizeY), // top right
-    //    (SCALE_X * tileSizeX), 0.f, // bottom right
-    //    0.f, 0.f//, // bottom left
-    //
-    //    // Texcoords
-    //    //0.0f, 0.0f,
-    //    //1.0f, 0.0f,
-    //    //1.0f, 1.0f,
-    //    //0.0f, 1.0f
-    //};
-
-    //glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    //Util::resetGlState();
-}
-
-
-void
 Level::print()
 {
     printf("----- Level Info:\n");
@@ -212,9 +153,11 @@ Level::print()
     TextureList::iterator t;
     int i, row;
 
+    // do this for each layer
+    Layer& layer = layers.find("platforms")->second;
     row = 0;
     printf("\n[%d]:  ", row);
-    for (p = platforms.begin(), i = 1; p != platforms.end(); ++p, ++i) {
+    for (p = layer.tiles.begin(), i = 1; p != layer.tiles.end(); ++p, ++i) {
         printf("%d | ", *p);
         if ((i % mapWidth == 0) && (row < (mapHeight - 1))) {
             ++row;
@@ -224,7 +167,7 @@ Level::print()
     printf("\n");
 
     // iterate over tilsets
-    for (t = textures.begin(); t != textures.end(); t++) {
+    for (t = textures.begin(); t != textures.end(); ++t) {
         printf("\ntileset: %s \n", t->first.c_str());
         printf("--- details: firstGID: %d lastGid: %d, w: %d, h: %d, tw: %d, th: %d\n",
                t->second.firstGid, t->second.lastGid, t->second.width,
@@ -232,77 +175,6 @@ Level::print()
     }
 
     printf("\n");
-}
-
-
-void
-Level::render2()
-{
-    // only create one shader, we will reuse it
-    // textures, ideally will be atlased
-    // for now we can just upload the individual textures
-    std::vector<int>::iterator p;
-    int i, row, col;
-    glm::mat4 trans;
-
-    //printf("tilesizeX is : %f\n");
-    glUseProgram(shaderProgram);
-    //glBindVertexArray(vao);
-    glBindTexture(GL_TEXTURE_2D, tex);
-
-    // ----- new code ----- //
-    glEnableVertexAttribArray(attributeCoord);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(attributeCoord, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-    GLuint elements[] = {
-        0, 1, 2,
-        2, 3, 0
-    };
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
-                 GL_STATIC_DRAW);
-
-    // TODO: this is not quite correct, it includes blank spaces as well
-    //point coords[4 * platforms.size()];
-    //point coords[1] = {
-    //    {1.0, 1.0, 1.0, 1.0}
-    //};
-
-    // ----- end new code ----- //
-
-    // TODO: start row at 1, remove (row+1) in glm::vec3 call
-    row = 0;
-    col = 0;
-    for (p = platforms.begin(), i = 0; p != platforms.end(); p++, i++) {
-        //printf("row and col are: %d, %d\n", row, col);
-
-        // if (*p > 0) {
-        //    useTexture(*p)
-        if (*p == 8) {
-            //glm::mat4 trans;
-            //trans = glm::translate(trans,
-            //                       //glm::vec3((SCALE_X * (10 * col)),
-            //                       //      (SCALE_Y * (10 * row)),
-            //                       glm::vec3((SCALE_X * ((float) - SCREEN_X + (tileSizeX * col))),
-            //                                 (SCALE_Y * ((float) SCREEN_Y - (tileSizeY * (row + 1)))),
-            //                                 1.0f));
-            //
-            //uniTrans = glGetUniformLocation(shaderProgram, "trans");
-            //
-            //glUniformMatrix4fv(uniTrans, 1, GL_FALSE, glm::value_ptr(trans));
-            //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        }
-
-        if (col < (TILES_ON_SCREEN_X - 1)) {
-            col++;
-        }
-        else {
-            col = 0;
-            row++;
-        }
-    }
-
-    Util::resetGlState();
 }
 
 

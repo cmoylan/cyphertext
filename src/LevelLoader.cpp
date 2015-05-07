@@ -24,16 +24,8 @@ Level::loadFromJson(const std::string& filename)
 
     for (i = 0; i < layers.Size(); i++) {
         layerName = layers[i]["name"].GetString();
-
-        if (layerName == "platforms") {
-            if (!setPlatforms(layers[i]["data"])) {
-                return false;
-            }
-        }
-        else if (layerName == "metadata") {
-            if (!setMetadata(layers[i]["data"])) {
-                return false;
-            }
+        if (!loadLayer(layerName, layers[i]["data"])) {
+            return false;
         }
     }
 
@@ -47,6 +39,39 @@ Level::loadFromJson(const std::string& filename)
     }
 
     return true;
+}
+
+
+bool
+Level::loadLayer(const std::string& layerName, const rapidjson::Value& data)
+{
+    int count = 0;
+    Layer layer;
+
+    clearLayer(layerName);
+
+    for (size_t i = 0; i < data.Size(); i++) {
+        int value = data[i].GetInt();
+        layer.tiles.push_back(value);
+
+        if (value > 0) {
+            count++;
+        }
+    }
+
+    layer.tileCount = count;
+    layers[layerName] = layer;
+
+    // TODO: actually check that something was loaded
+    return true;
+}
+
+
+void
+Level::clearLayer(const std::string& name)
+{
+    //Layer layer = layers.find(name);
+    //delete layer;
 }
 
 
@@ -96,14 +121,11 @@ Level::setMetadata(const rapidjson::Value& data)
 bool
 Level::setPlatforms(const rapidjson::Value& data)
 {
-    //layers[""];
-    int value;
-
     platforms.clear();
     platformCount = 0;
 
     for (int i = 0; i < data.Size(); i++) {
-        value = data[i].GetInt();
+        int value = data[i].GetInt();
         platforms.push_back(value);
 
         if (value > 0) {

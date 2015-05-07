@@ -109,7 +109,7 @@ Util::createShader(GLenum shaderType, const std::string& shaderFile)
     GLint status;
     std::string shaderSource;
 
-    shaderSource = loadStringFromFile(shaderFile.c_str());
+    shaderSource = loadStringFromFile(shaderFile);
 
     GLuint shader = glCreateShader(shaderType);
 

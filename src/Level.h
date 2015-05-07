@@ -96,15 +96,15 @@ public:
     ~Level();
 
     void initGL();
-    void initGL2();
 
     bool loadFromJson(const std::string& filename);
     bool loadTileset(const rapidjson::Value& data);
     bool setPlatforms(const rapidjson::Value& data);
     bool setMetadata(const rapidjson::Value& data);
+    bool loadLayer(const std::string& layerName, const rapidjson::Value& data);
+    void clearLayer(const std::string& name);
 
     void render();
-    void render2();
 
     /**
      * Sets the correct texture for the given GID
