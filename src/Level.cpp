@@ -53,13 +53,8 @@ Level::initGL()
 void
 Level::render()
 {
-    int c = 0;
-    int i, row, col;
-    std::vector<int>::iterator p;
-    float transformX, transformY;
-
     // TODO: only need to do this once
-    point tl, tr, bl, br;
+    Point tl, tr, bl, br;
     tl = { -1.f, (SCALE_Y * tileSizeY) - 1.f};
     tr = { (SCALE_X * tileSizeX) - 1.f, (SCALE_Y * tileSizeY) - 1.f };
     br = { (SCALE_X * tileSizeX) - 1.f, -1.f };
@@ -69,25 +64,26 @@ Level::render()
     glBindVertexArray(vao);
     glBindTexture(GL_TEXTURE_2D, tex);
 
-    // TODO: this will be tile count * vertex data
-    // right now this is too big because we don't need to send vertex
-    // data for empty tiles
-    GLfloat vertices[platforms.size() * 8];
+    // TODO: do this for each layer
+    // TODO: will need to do them in the correct order so that bg is behind fg
+    Layer& layer = layers.find("platforms")->second;
+    // TODO: magic number
+    GLfloat vertices[layer.tileCount * 24];
 
     // main loop to set up vertex data for a tile layer
-    row = 0;
-    col = 0;
-    // TODO: should change the naming here to tiles rather than platforms
-    for (p = platforms.begin(), i = 0; p != platforms.end(); ++p, ++i) {
-        if (*p != 0) {
+    std::vector<int>::iterator tile;
+    int row = 0, col = 0, c = 0;
+
+    for (tile = layer.tiles.begin(); tile != layer.tiles.end(); ++tile) {
+        if (*tile != 0) {
             // bl, tl, tr, br
-            //((SCALE_X * ((float) - SCREEN_X + (tileSizeX * col))),
-            //(SCALE_Y * ((float) SCREEN_Y - (tileSizeY * (row + 1)))),
-            transformX = SCALE_X * (float)(tileSizeX * col);
-            transformY = SCALE_Y * (float)(tileSizeY * row);
+            float transformX = SCALE_X * (float)(tileSizeX * col);
+            float transformY = SCALE_Y * (float)(tileSizeY * row);
             //printf("col: %d, val: %f ", col, transformX);
             // NOTE: the y axis has to be inverted because the level is stored
-            //       from top to bottom in the tmx format
+            //       from top to bottom in the tmx format. We should change the
+            //       way the level is stored to avoid doing that.
+
             //vertex
             vertices[c++] = bl.x + transformX; // 0
             vertices[c++] = -1.f * (bl.y + transformY);
@@ -135,7 +131,7 @@ Level::render()
 
     glDrawArrays(GL_TRIANGLES, 0, c / 4);
 
-    //glFlush(); // TODO: remove
+    glFlush(); // TODO: remove
 
 }
 
@@ -146,7 +142,7 @@ Level::print()
     printf("----- Level Info:\n");
     printf("width: %d, height: %d\n", mapWidth, mapHeight);
     printf("tilewidth: %d, tileheight: %d\n", tileWidth, tileHeight);
-    printf("platform count: %d\n", platformCount);
+    //printf("platform count: %d\n", platformCount);
 
     // ----- print out the level ----- //
     std::vector<int>::iterator p;
@@ -165,13 +161,15 @@ Level::print()
         }
     }
     printf("\n");
+    printf("tile count is: %d\n", layer.tileCount);
 
     // iterate over tilsets
     for (t = textures.begin(); t != textures.end(); ++t) {
         printf("\ntileset: %s \n", t->first.c_str());
-        printf("--- details: firstGID: %d lastGid: %d, w: %d, h: %d, tw: %d, th: %d\n",
+        printf("--- details: firstGID: %d lastGid: %d, w: %d, h: %d, tw: %d, th: %d, rows: %d, cols: %d\n",
                t->second.firstGid, t->second.lastGid, t->second.width,
-               t->second.height, t->second.tileWidth, t->second.tileHeight);
+               t->second.height, t->second.tileWidth, t->second.tileHeight,
+               t->second.rows, t->second.cols);
     }
 
     printf("\n");
@@ -184,9 +182,12 @@ Level::unloadTextures()
 }
 
 
-void
+TexCoord
 Level::useTextureFor(int gid)
 {
+    // --- from gid find and use correct texture
+    // --- calculate and return texcoords
+
     // TODO: cache this in a hash...hash this
     // ---- IDEAS --- //
     // create hash, keyed on gid
@@ -196,20 +197,16 @@ Level::useTextureFor(int gid)
 
     TextureList::iterator t;
     // --- find correct tileset
-    // iterate over tilesets
-    // we now have lastGID
-    for (t = textures.begin(); t != textures.end(); t++) {
-        //t->first
-        //t->second
+    for (t = textures.begin(); t != textures.end(); ++t) {
         if ((t->second.firstGid <= gid) && (t->second.lastGid >= gid)) {
             // this is the right tileset
             // calculate ofset
+            // offset x  = gid divided by rows
+            // offset y = gid deivided by cols
+            // offset x * tilesizex
+            // offset y * tilesizey
 
         }
     }
 
-
-    // --- calculate texture subcoords
-
-    // --- use texture with subcoords
 }

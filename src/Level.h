@@ -37,12 +37,14 @@ struct LevelTexture {
     int height;
     int tileWidth;
     int tileHeight;
+    int rows;
+    int cols;
 };
 
 typedef std::map<std::string, LevelTexture> TextureList;
 typedef std::map<std::string, Layer> LayerList;
 
-struct point {
+struct Point {
     GLfloat x;
     GLfloat y;
 };
@@ -53,6 +55,14 @@ struct point {
 //    GLfloat tx;
 //    GLfloat ty;
 //};
+
+struct TexCoord {
+    Point tl;
+    Point tr;
+    Point bl;
+    Point br;
+};
+
 
 class Level {
 
@@ -67,8 +77,6 @@ class Level {
     // end new vars
 
     float tileSizeX, tileSizeY;
-
-
 
     enum VAO_IDs { Triangles, NumVAOs };
     enum Buffer_IDs { ArrayBuffer, ElementArrayBuffer, NumBuffers };
@@ -107,10 +115,11 @@ public:
     void render();
 
     /**
-     * Sets the correct texture for the given GID
+     * Sets the correct texture for the given GID.
      * @param gid
+     * @returns the coordinates for the subtexture
      */
-    void useTextureFor(int gid);
+    TexCoord useTextureFor(int gid);
 
     void print();
 

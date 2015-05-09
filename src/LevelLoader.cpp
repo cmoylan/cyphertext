@@ -21,7 +21,6 @@ Level::loadFromJson(const std::string& filename)
     // TODO: possibly abstract
     // Using a reference for consecutive access is handy and faster.
     const Value& layers = document["layers"];
-
     for (i = 0; i < layers.Size(); i++) {
         layerName = layers[i]["name"].GetString();
         if (!loadLayer(layerName, layers[i]["data"])) {
@@ -30,7 +29,6 @@ Level::loadFromJson(const std::string& filename)
     }
 
     // load sprites into textured
-    // use glTexSubImage2d to only use a portion of the texture
     const Value& tilesets = document["tilesets"];
     for (i = 0; i < tilesets.Size(); i++) {
         if (!loadTileset(tilesets[i])) {
@@ -70,6 +68,7 @@ Level::loadLayer(const std::string& layerName, const rapidjson::Value& data)
 void
 Level::clearLayer(const std::string& name)
 {
+    // TODO: do something
     //Layer layer = layers.find(name);
     //delete layer;
 }
@@ -81,7 +80,7 @@ Level::loadTileset(const rapidjson::Value& data)
     using namespace rapidjson;
 
     GLuint tex;
-    int firstGid, lastGid, w, h, tw, th;
+    int firstGid, lastGid, w, h, tw, th, rows, cols;
     std::string filename;
     std::string layername;
 
@@ -102,8 +101,10 @@ Level::loadTileset(const rapidjson::Value& data)
     tw = data["tilewidth"].GetInt();
     th = data["tileheight"].GetInt();
     lastGid = firstGid + ((w / tw) * (h / th)) - 1;
+    rows = w / tw;
+    cols = h / th;
 
-    LevelTexture levelTexture = { tex, firstGid, lastGid, w, h, tw, th };
+    LevelTexture levelTexture = { tex, firstGid, lastGid, w, h, tw, th, rows, cols };
     textures[layername] = levelTexture;
 
     return true;
