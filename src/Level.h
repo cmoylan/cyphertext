@@ -108,13 +108,45 @@ public:
 
     void initGL();
 
+    // ----- Level loading ----- //
+    /**
+     * Loads a TMX level from a json file
+     * @param filename the json file from which to load the level
+     * @returns a boolean indicating success or failure
+     */
     bool loadFromJson(const std::string& filename);
+
+    /**
+     * Populates a LevelTexture struct from tileset json data
+     * @param data a rapidjson value reference to the tileset data
+     * @returns a boolean indicating success/failure
+     */
     bool loadTileset(const rapidjson::Value& data);
+
     //void clearTileset(const std::string& name);
+
+    /**
+     * Populates a Layer struct and pushes it onto the level's LayerList
+     * @param layerName a string key for the LayerList map
+     * @param data a rapidjson referece to the json data to load
+     * @param width the width of the level in tiles
+     * @param height the height of the level in tiles
+     * @return a boolean to indicate load success/failure
+     *
+     * Detailed description follows.
+     */
     bool loadLayer(const std::string& layerName, const rapidjson::Value& data,
                    int width, int height);
+    /**
+     * Deletes a Layer from the LayerList
+     * @param name a string key for the Layer to remove from LayerList
+     */
     void clearLayer(const std::string& name);
 
+    // ----- Rendering ----- //
+    /**
+     * Renders the level to the screen
+     */
     void render();
 
     /**
@@ -124,7 +156,11 @@ public:
      */
     TexCoord useTextureFor(int test);
 
+    /**
+     * Sends level debugging information to stdout
+     */
     void print();
 
+    // DEPRECATED
     void unloadTextures();
 };

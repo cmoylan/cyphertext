@@ -9,3 +9,6 @@
 - [x] fix framerate
 - [x] holding down controls
 - [x] textures
+
+- [] platform collision detection
+- [] level scrolling
