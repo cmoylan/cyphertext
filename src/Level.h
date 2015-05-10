@@ -43,9 +43,6 @@ struct LevelTexture {
     float scaleFactorY;
 };
 
-typedef std::map<std::string, LevelTexture> TextureList;
-typedef std::map<std::string, Layer> LayerList;
-
 struct Point {
     GLfloat x;
     GLfloat y;
@@ -64,6 +61,10 @@ struct TexCoord {
     Point bl;
     Point br;
 };
+
+typedef std::map<std::string, LevelTexture> TextureList;
+typedef std::map<std::string, Layer> LayerList;
+typedef std::map<int, TexCoord> GidTexCoords;
 
 
 class Level {
@@ -87,16 +88,14 @@ class Level {
     GLuint Buffers[NumBuffers];
     GLuint NumVertices;
 
+    GidTexCoords gidTexCoords;
+
 public:
     int mapWidth;
     int mapHeight;
     int tileWidth;
     int tileHeight;
     Vector2D camera;
-
-
-    std::vector<int> platforms;
-    int platformCount;
 
     LayerList layers;
     TextureList textures;
@@ -109,8 +108,7 @@ public:
 
     bool loadFromJson(const std::string& filename);
     bool loadTileset(const rapidjson::Value& data);
-    bool setPlatforms(const rapidjson::Value& data);
-    bool setMetadata(const rapidjson::Value& data);
+    //void clearTileset(const std::string& name);
     bool loadLayer(const std::string& layerName, const rapidjson::Value& data);
     void clearLayer(const std::string& name);
 
@@ -121,7 +119,7 @@ public:
      * @param gid
      * @returns the coordinates for the subtexture
      */
-    TexCoord useTextureFor(int gid);
+    TexCoord useTextureFor(int test);
 
     void print();
 

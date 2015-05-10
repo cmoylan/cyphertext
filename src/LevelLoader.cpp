@@ -109,28 +109,28 @@ Level::loadTileset(const rapidjson::Value& data)
 }
 
 
-bool
-Level::setMetadata(const rapidjson::Value& data)
-{
-    // TODO: get camera and character starting positions
-    return true;
-}
+// bool
+// Level::setMetadata(const rapidjson::Value& data)
+// {
+//     // TODO: get camera and character starting positions
+//     return true;
+// }
 
 
-bool
-Level::setPlatforms(const rapidjson::Value& data)
-{
-    platforms.clear();
-    platformCount = 0;
-
-    for (int i = 0; i < data.Size(); i++) {
-        int value = data[i].GetInt();
-        platforms.push_back(value);
-
-        if (value > 0) {
-            platformCount++;
-        }
-    }
-
-    return true;
-}
+// bool
+// Level::setPlatforms(const rapidjson::Value& data)
+// {
+//     platforms.clear();
+//     platformCount = 0;
+//
+//     for (int i = 0; i < data.Size(); i++) {
+//         int value = data[i].GetInt();
+//         platforms.push_back(value);
+//
+//         if (value > 0) {
+//             platformCount++;
+//         }
+//     }
+//
+//     return true;
+// }
