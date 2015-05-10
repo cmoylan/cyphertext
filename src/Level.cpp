@@ -10,7 +10,7 @@ Level::Level()
 
     // TODO: temp
     glGenTextures(1, &tex);
-    Util::loadTexture(tex, "res/red-blue-square.png");
+    Util::loadTexture(tex, "res/test-tileset/grass-tiles-2-small.png");
 }
 
 
@@ -83,38 +83,39 @@ Level::render()
             // NOTE: the y axis has to be inverted because the level is stored
             //       from top to bottom in the tmx format. We should change the
             //       way the level is stored to avoid doing that.
+            TexCoord texCoord = useTextureFor(*tile);
 
             //vertex
             vertices[c++] = bl.x + transformX; // 0
             vertices[c++] = -1.f * (bl.y + transformY);
-            vertices[c++] = 0.f; // texcoord
-            vertices[c++] = 1.f;
+            vertices[c++] = texCoord.bl.x; // texcoord
+            vertices[c++] = texCoord.bl.y;
 
             vertices[c++] = tl.x + transformX; //1
             vertices[c++] = -1.f * (tl.y + transformY);
-            vertices[c++] = 0.f; // texcoord
-            vertices[c++] = 0.f;
+            vertices[c++] = texCoord.tl.x; // texcoord
+            vertices[c++] = texCoord.tl.y;
 
             vertices[c++] = tr.x + transformX; //2
             vertices[c++] = -1.f * (tr.y + transformY);
-            vertices[c++] = 1.f; // texcoord
-            vertices[c++] = 0.f;
+            vertices[c++] = texCoord.tr.x; // texcoord
+            vertices[c++] = texCoord.tr.y;
 
             // second triangle
             vertices[c++] = bl.x + transformX; // 0
             vertices[c++] = -1.f * (bl.y + transformY);
-            vertices[c++] = 0.f; // texcoord
-            vertices[c++] = 1.f;
+            vertices[c++] = texCoord.bl.x; // texcoord
+            vertices[c++] = texCoord.bl.y;
 
             vertices[c++] = tr.x + transformX; // 2
             vertices[c++] = -1.f * (tr.y + transformY);
-            vertices[c++] = 1.f;
-            vertices[c++] = 0.f;
+            vertices[c++] = texCoord.tr.x;
+            vertices[c++] = texCoord.tr.y;
 
             vertices[c++] = br.x + transformX; // 3
             vertices[c++] = -1.f * (br.y + transformY);
-            vertices[c++] = 1.f;
-            vertices[c++] = 1.f;
+            vertices[c++] = texCoord.br.x;
+            vertices[c++] = texCoord.br.y;
         }
 
         if (col < (TILES_ON_SCREEN_X - 1)) {
@@ -165,11 +166,13 @@ Level::print()
 
     // iterate over tilsets
     for (t = textures.begin(); t != textures.end(); ++t) {
+        LevelTexture& tex = t->second;
         printf("\ntileset: %s \n", t->first.c_str());
-        printf("--- details: firstGID: %d lastGid: %d, w: %d, h: %d, tw: %d, th: %d, rows: %d, cols: %d\n",
-               t->second.firstGid, t->second.lastGid, t->second.width,
-               t->second.height, t->second.tileWidth, t->second.tileHeight,
-               t->second.rows, t->second.cols);
+        printf("--- details: firstGID: %d lastGid: %d, w: %d, h: %d, tw: %d, th: %d,\n",
+               tex.firstGid, tex.lastGid, tex.width, tex.height, tex.tileWidth,
+               tex.tileHeight);
+        printf("             rows: %d, cols: %d scaleX: %f, scaleY: %f\n",
+               tex.numRows, tex.numCols, tex.scaleFactorX, tex.scaleFactorY);
     }
 
     printf("\n");
@@ -185,8 +188,11 @@ Level::unloadTextures()
 TexCoord
 Level::useTextureFor(int gid)
 {
-    // --- from gid find and use correct texture
-    // --- calculate and return texcoords
+    /////////////////////////////////////////////////////////
+    // TODO
+    // Optimize the hell out of this thing
+    //
+    /////////////////////////////////////////////////////////
 
     // TODO: cache this in a hash...hash this
     // ---- IDEAS --- //
@@ -194,19 +200,32 @@ Level::useTextureFor(int gid)
     // contents of hash are texID, and offset/subset measurements
     // ...that's it!
     // ---- END IDEA ----//
+    TexCoord texCoord;
 
     TextureList::iterator t;
     // --- find correct tileset
     for (t = textures.begin(); t != textures.end(); ++t) {
-        if ((t->second.firstGid <= gid) && (t->second.lastGid >= gid)) {
-            // this is the right tileset
-            // calculate ofset
-            // offset x  = gid divided by rows
-            // offset y = gid deivided by cols
-            // offset x * tilesizex
-            // offset y * tilesizey
+        LevelTexture& texture = t->second;
 
+        if ((texture.firstGid <= gid) && (texture.lastGid >= gid)) {
+            // --- calculate texcoords
+            // TODO: make this its own method?
+            int row = gid / texture.numCols;
+            int col = gid % texture.numCols;
+            int tw = texture.tileWidth;
+            int th = texture.tileHeight;
+            float scaleFactorX = texture.scaleFactorX;
+            float scaleFactorY = texture.scaleFactorY;
+
+            // TODO: maybe just use an array here
+            texCoord.tl = *new Point { scaleFactorX * (float)(col * tw), scaleFactorY * (float)(row * th) };
+            texCoord.tr = *new Point { scaleFactorX * (float)((col + 1)*tw), scaleFactorY * (float)(row * th) };
+            texCoord.br = *new Point { scaleFactorX * (float)(col * tw), (scaleFactorY * (float)(row + 1) * th) };
+            texCoord.bl = *new Point { scaleFactorX * (float)((col + 1) * tw), scaleFactorY * (float)((row + 1) * th) };
+
+            break;
         }
     }
 
+    return texCoord;
 }

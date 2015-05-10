@@ -80,14 +80,10 @@ Level::loadTileset(const rapidjson::Value& data)
     using namespace rapidjson;
 
     GLuint tex;
-    int firstGid, lastGid, w, h, tw, th, rows, cols;
-    std::string filename;
-    std::string layername;
-
     glGenTextures(1, &tex);
 
-    filename = data["image"].GetString();
-    layername = data["name"].GetString();
+    std::string filename = data["image"].GetString();
+    std::string layername = data["name"].GetString();
     // FIXME: test if this stuff is found...it should be there
     //if (!filename || !layername) {
     //	return false;
@@ -95,16 +91,18 @@ Level::loadTileset(const rapidjson::Value& data)
 
     //Util::loadTexture(tex, filename);
 
-    firstGid = data["firstgid"].GetInt();
-    w = data["imagewidth"].GetInt();
-    h = data["imageheight"].GetInt();
-    tw = data["tilewidth"].GetInt();
-    th = data["tileheight"].GetInt();
-    lastGid = firstGid + ((w / tw) * (h / th)) - 1;
-    rows = w / tw;
-    cols = h / th;
+    int firstGid = data["firstgid"].GetInt();
+    int w = data["imagewidth"].GetInt();
+    int h = data["imageheight"].GetInt();
+    int tw = data["tilewidth"].GetInt();
+    int th = data["tileheight"].GetInt();
+    int lastGid = firstGid + ((w / tw) * (h / th)) - 1;
+    int numRows = h / th;
+    int numCols = w / tw;
+    float scaleFactorX = 1.f / (float) w;
+    float scaleFactorY = 1.f / (float) h;
 
-    LevelTexture levelTexture = { tex, firstGid, lastGid, w, h, tw, th, rows, cols };
+    LevelTexture levelTexture = { tex, firstGid, lastGid, w, h, tw, th, numRows, numCols, scaleFactorX, scaleFactorY };
     textures[layername] = levelTexture;
 
     return true;

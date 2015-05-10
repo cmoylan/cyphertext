@@ -37,8 +37,10 @@ struct LevelTexture {
     int height;
     int tileWidth;
     int tileHeight;
-    int rows;
-    int cols;
+    int numRows;
+    int numCols;
+    float scaleFactorX;
+    float scaleFactorY;
 };
 
 typedef std::map<std::string, LevelTexture> TextureList;
