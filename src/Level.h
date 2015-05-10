@@ -26,6 +26,8 @@
 struct Layer {
     int tileCount;
     std::vector<int> tiles;
+    int width;
+    int height;
 };
 
 struct LevelTexture {
@@ -109,7 +111,8 @@ public:
     bool loadFromJson(const std::string& filename);
     bool loadTileset(const rapidjson::Value& data);
     //void clearTileset(const std::string& name);
-    bool loadLayer(const std::string& layerName, const rapidjson::Value& data);
+    bool loadLayer(const std::string& layerName, const rapidjson::Value& data,
+                   int width, int height);
     void clearLayer(const std::string& name);
 
     void render();

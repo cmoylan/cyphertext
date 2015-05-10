@@ -23,7 +23,8 @@ Level::loadFromJson(const std::string& filename)
     const Value& layers = document["layers"];
     for (i = 0; i < layers.Size(); i++) {
         layerName = layers[i]["name"].GetString();
-        if (!loadLayer(layerName, layers[i]["data"])) {
+        if (!loadLayer(layerName, layers[i]["data"], layers[i]["width"].GetInt(),
+                       layers[i]["height"].GetInt())) {
             return false;
         }
     }
@@ -40,8 +41,10 @@ Level::loadFromJson(const std::string& filename)
 }
 
 
+// TODO: don't take a rapidjson reference here, just an array pointer
 bool
-Level::loadLayer(const std::string& layerName, const rapidjson::Value& data)
+Level::loadLayer(const std::string& layerName, const rapidjson::Value& data,
+                 int width, int height)
 {
     int count = 0;
     Layer layer;
@@ -58,6 +61,7 @@ Level::loadLayer(const std::string& layerName, const rapidjson::Value& data)
     }
 
     layer.tileCount = count;
+
     layers[layerName] = layer;
 
     // TODO: actually check that something was loaded

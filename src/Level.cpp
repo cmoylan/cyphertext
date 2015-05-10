@@ -10,8 +10,8 @@ Level::Level()
 
     // TODO: temp
     glGenTextures(1, &tex);
-    //Util::loadTexture(tex, "res/test-tileset/grass-tiles-2-small.png");
-    Util::loadTexture(tex, "res/col-test.png");
+    Util::loadTexture(tex, "res/test-tileset/grass-tiles-2-small.png");
+    //Util::loadTexture(tex, "res/col-test.png");
 
 }
 
@@ -79,43 +79,45 @@ Level::render()
             // bl, tl, tr, br
             float transformX = SCALE_X * (float)(tileSizeX * col);
             float transformY = SCALE_Y * (float)(tileSizeY * row);
-            //printf("col: %d, val: %f ", col, transformX);
+            TexCoord texCoord = useTextureFor(*tile);
+
             // NOTE: the y axis has to be inverted because the level is stored
             //       from top to bottom in the tmx format. We should change the
             //       way the level is stored to avoid doing that.
-            TexCoord texCoord = useTextureFor(*tile);
+            //       Because the y axis is inverted, the texcoord y axis also has
+            //       to be inverted.
 
             //vertex
             vertices[c++] = bl.x + transformX; // 0
-            vertices[c++] = (bl.y + transformY);
-            vertices[c++] = texCoord.bl.x; // texcoord
-            vertices[c++] = texCoord.bl.y;
-
-            vertices[c++] = tl.x + transformX; //1
-            vertices[c++] = (tl.y + transformY);
+            vertices[c++] = -1.f * (bl.y + transformY);
             vertices[c++] = texCoord.tl.x; // texcoord
             vertices[c++] = texCoord.tl.y;
 
-            vertices[c++] = tr.x + transformX; //2
-            vertices[c++] = (tr.y + transformY);
-            vertices[c++] = texCoord.tr.x; // texcoord
-            vertices[c++] = texCoord.tr.y;
-
-            // second triangle
-            vertices[c++] = bl.x + transformX; // 0
-            vertices[c++] = (bl.y + transformY);
+            vertices[c++] = tl.x + transformX; //1
+            vertices[c++] = -1.f * (tl.y + transformY);
             vertices[c++] = texCoord.bl.x; // texcoord
             vertices[c++] = texCoord.bl.y;
 
-            vertices[c++] = tr.x + transformX; // 2
-            vertices[c++] = (tr.y + transformY);
-            vertices[c++] = texCoord.tr.x;
-            vertices[c++] = texCoord.tr.y;
+            vertices[c++] = tr.x + transformX; //2
+            vertices[c++] = -1.f * (tr.y + transformY);
+            vertices[c++] = texCoord.br.x; // texcoord
+            vertices[c++] = texCoord.br.y;
 
-            vertices[c++] = br.x + transformX; // 3
-            vertices[c++] = (br.y + transformY);
+            // second triangle
+            vertices[c++] = bl.x + transformX; // 0
+            vertices[c++] = -1.f * (bl.y + transformY);
+            vertices[c++] = texCoord.tl.x; // texcoord
+            vertices[c++] = texCoord.tl.y;
+
+            vertices[c++] = tr.x + transformX; // 2
+            vertices[c++] = -1.f * (tr.y + transformY);
             vertices[c++] = texCoord.br.x;
             vertices[c++] = texCoord.br.y;
+
+            vertices[c++] = br.x + transformX; // 3
+            vertices[c++] = -1.f * (br.y + transformY);
+            vertices[c++] = texCoord.tr.x;
+            vertices[c++] = texCoord.tr.y;
         }
 
         if (col < (TILES_ON_SCREEN_X - 1)) {
@@ -199,14 +201,10 @@ Level::useTextureFor(int tmxGid)
     TextureList::iterator t;
 
     // --- find correct tileset
-    printf("looking for %d: ", gid);
     for (t = textures.begin(); t != textures.end(); ++t) {
         LevelTexture& texture = t->second;
 
         if ((texture.firstGid <= tmxGid) && (texture.lastGid >= tmxGid)) {
-	  printf("found it\n");
-          printf("tmxgid is: %d, gid is: %d\n", tmxGid, gid);
-
             // --- calculate texcoords
             // TODO: make this its own method?
             int row = gid / texture.numCols;
@@ -219,17 +217,16 @@ Level::useTextureFor(int tmxGid)
             // TODO: maybe just use an array here
             texCoord.tl = *new Point { scaleFactorX * (float)(col * tw), scaleFactorY * (float)(row * th) };
             texCoord.tr = *new Point { scaleFactorX * (float)((col + 1) * tw), scaleFactorY * (float)(row * th) };
-            texCoord.br = *new Point { scaleFactorX * (float)((col +1) * tw), (scaleFactorY * (float)(row + 1) * th) };
+            texCoord.br = *new Point { scaleFactorX * (float)((col + 1) * tw), (scaleFactorY * (float)(row + 1) * th) };
             texCoord.bl = *new Point { scaleFactorX * (float)(col * tw), scaleFactorY * (float)((row + 1) * th) };
-            printf("-- details for %d: [x,y]: %d %d, [x2,y2]: %d %d\n", gid, col * tw,
-                   row * th, (col + 1) * tw, (row + 1) * th);
-            printf("     row: %d, col: %d\n", row, col);
-            gidTexCoords[tmxGid] = texCoord; // add it to memo
+            //printf("-- details for %d: [x,y]: %d %d, [x2,y2]: %d %d\n", gid, col * tw,
+            //       row * th, (col + 1) * tw, (row + 1) * th);
+            //printf("     row: %d, col: %d\n", row, col);
+            gidTexCoords[tmxGid] = texCoord; // add it to cache
 
             break;
         }
     }
-    printf("\n");
 
     return texCoord;
 }
