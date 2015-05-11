@@ -62,8 +62,8 @@ Level::isBlocked(int y, int startX, int endX)
     // that's it
     int col1 = (startX + 100) / 10;
     int col2 = (endX + 100) / 10;
-    int row = (y + 100) / 10;
-    //printf("checking %d: %d..%d\n", row, col1, col2);
+    int row = ((-1 * y) + 100) / 10;
+    //printf("coords are: %d: %d..%d - checking %d: %d..%d\n", y, startX, endX, row, col1, col2);
 
     // need to detect the presence of tiles in the platform layers
     Layer& layer = layers.find("platforms")->second;
@@ -72,6 +72,7 @@ Level::isBlocked(int y, int startX, int endX)
     //printf("gids are: %d %d\n", gid1, gid2);
 
     if (gid1 != 0 || gid2 != 0) {
+        //printf("returning true for %d: %d..%d\n", y, startX, endX);
         return true;
     }
     return false;
@@ -81,12 +82,8 @@ void
 Level::render()
 {
     // TODO: only need to do this once
+    // start in upper left corner of screen: (-1.f, 1.f)
     Point tl, tr, bl, br;
-    //tl = { -1.f, (SCALE_Y * tileSizeY) - 1.f};
-    //tr = { (SCALE_X * tileSizeX) - 1.f, (SCALE_Y * tileSizeY) - 1.f };
-    //br = { (SCALE_X * tileSizeX) - 1.f, -1.f };
-    //bl = { -1.f, -1.f };
-
     tl = { -1.f, 1.f };
     tr = { (SCALE_X * tileSizeX) - 1.f, 1.f };
     br = { (SCALE_X * tileSizeX) - 1.f, 1.f - (SCALE_Y * tileSizeY) };
@@ -113,13 +110,7 @@ Level::render()
             float transformY = SCALE_Y * (float)(tileSizeY * row);
             TexCoord texCoord = useTextureFor(*tile);
 
-            // NOTE: the y axis has to be inverted because the level is stored
-            //       from top to bottom in the tmx format. We should change the
-            //       way the level is stored to avoid doing that.
-            //       Because the y axis is inverted, the texcoord y axis also has
-            //       to be inverted.
-
-            //vertex
+            // first triangle
             vertices[c++] = bl.x + transformX; // 0
             vertices[c++] = (bl.y - transformY);
             vertices[c++] = texCoord.bl.x; // texcoord

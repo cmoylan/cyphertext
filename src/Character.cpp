@@ -102,9 +102,9 @@ Character::update()
     // of the platforms, stop falling
     if (game->level->isBlocked(origin.y, origin.x, (origin.x + size.x))) {
         // can't fall, stop falling
-        jumping = false;
-        falling = false;
-        printf("falling check is true for: y: %d, x: %d\n", origin.y, origin.x);
+        //jumping = false;
+        //falling = false;
+        //printf("falling check is true for: y: %d, x: %d\n", origin.y, origin.x);
     }
     //continue falling
     else {
