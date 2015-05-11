@@ -50,15 +50,47 @@ Level::initGL()
 }
 
 
+bool
+Level::isBlocked(int y, int startX, int endX)
+{
+    // TODO: store everything in the same format
+
+    // assume each tile is 10 wide - move this to a constant or calculate it
+
+    // convert those into 2 col positions
+    // check the array at those 2 places
+    // that's it
+    int col1 = (startX + 100) / 10;
+    int col2 = (endX + 100) / 10;
+    int row = (y + 100) / 10;
+    //printf("checking %d: %d..%d\n", row, col1, col2);
+
+    // need to detect the presence of tiles in the platform layers
+    Layer& layer = layers.find("platforms")->second;
+    int gid1 = layer.tiles[(row * 20) + col1];
+    int gid2 = layer.tiles[(row * 20) + col2];
+    //printf("gids are: %d %d\n", gid1, gid2);
+
+    if (gid1 != 0 || gid2 != 0) {
+        return true;
+    }
+    return false;
+}
+
 void
 Level::render()
 {
     // TODO: only need to do this once
     Point tl, tr, bl, br;
-    tl = { -1.f, (SCALE_Y * tileSizeY) - 1.f};
-    tr = { (SCALE_X * tileSizeX) - 1.f, (SCALE_Y * tileSizeY) - 1.f };
-    br = { (SCALE_X * tileSizeX) - 1.f, -1.f };
-    bl = { -1.f, -1.f };
+    //tl = { -1.f, (SCALE_Y * tileSizeY) - 1.f};
+    //tr = { (SCALE_X * tileSizeX) - 1.f, (SCALE_Y * tileSizeY) - 1.f };
+    //br = { (SCALE_X * tileSizeX) - 1.f, -1.f };
+    //bl = { -1.f, -1.f };
+
+    tl = { -1.f, 1.f };
+    tr = { (SCALE_X * tileSizeX) - 1.f, 1.f };
+    br = { (SCALE_X * tileSizeX) - 1.f, 1.f - (SCALE_Y * tileSizeY) };
+    bl = { -1.f, 1.f - (SCALE_Y * tileSizeY) };
 
     glUseProgram(shaderProgram);
     glBindVertexArray(vao);
@@ -89,35 +121,35 @@ Level::render()
 
             //vertex
             vertices[c++] = bl.x + transformX; // 0
-            vertices[c++] = -1.f * (bl.y + transformY);
-            vertices[c++] = texCoord.tl.x; // texcoord
-            vertices[c++] = texCoord.tl.y;
-
-            vertices[c++] = tl.x + transformX; //1
-            vertices[c++] = -1.f * (tl.y + transformY);
+            vertices[c++] = (bl.y - transformY);
             vertices[c++] = texCoord.bl.x; // texcoord
             vertices[c++] = texCoord.bl.y;
 
-            vertices[c++] = tr.x + transformX; //2
-            vertices[c++] = -1.f * (tr.y + transformY);
-            vertices[c++] = texCoord.br.x; // texcoord
-            vertices[c++] = texCoord.br.y;
-
-            // second triangle
-            vertices[c++] = bl.x + transformX; // 0
-            vertices[c++] = -1.f * (bl.y + transformY);
+            vertices[c++] = tl.x + transformX; //1
+            vertices[c++] = (tl.y - transformY);
             vertices[c++] = texCoord.tl.x; // texcoord
             vertices[c++] = texCoord.tl.y;
 
-            vertices[c++] = tr.x + transformX; // 2
-            vertices[c++] = -1.f * (tr.y + transformY);
-            vertices[c++] = texCoord.br.x;
-            vertices[c++] = texCoord.br.y;
+            vertices[c++] = tr.x + transformX; //2
+            vertices[c++] = (tr.y - transformY);
+            vertices[c++] = texCoord.tr.x; // texcoord
+            vertices[c++] = texCoord.tr.y;
 
-            vertices[c++] = br.x + transformX; // 3
-            vertices[c++] = -1.f * (br.y + transformY);
+            // second triangle
+            vertices[c++] = bl.x + transformX; // 0
+            vertices[c++] = (bl.y - transformY);
+            vertices[c++] = texCoord.bl.x; // texcoord
+            vertices[c++] = texCoord.bl.y;
+
+            vertices[c++] = tr.x + transformX; // 2
+            vertices[c++] = (tr.y - transformY);
             vertices[c++] = texCoord.tr.x;
             vertices[c++] = texCoord.tr.y;
+
+            vertices[c++] = br.x + transformX; // 3
+            vertices[c++] = (br.y - transformY);
+            vertices[c++] = texCoord.br.x;
+            vertices[c++] = texCoord.br.y;
         }
 
         if (col < (TILES_ON_SCREEN_X - 1)) {

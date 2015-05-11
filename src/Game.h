@@ -47,13 +47,14 @@ class Game {
     CollisionManager *collisionManager;
     EnemyAI *enemyAI; // enemy AI manager
 
-    Level *level;
     Menu *menu;
 
     int playerInputX;
     int playerInputY;
 
 public:
+    Level *level;
+
     Game();
 
     ~Game();

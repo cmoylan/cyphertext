@@ -93,6 +93,7 @@ class Level {
     GidTexCoords gidTexCoords;
 
 public:
+    // following are in pixels
     int mapWidth;
     int mapHeight;
     int tileWidth;
@@ -102,13 +103,15 @@ public:
     LayerList layers;
     TextureList textures;
 
-
     Level();
     ~Level();
 
     void initGL();
 
-    // ----- Level loading ----- //
+    // maybe this should take a vector and a direction
+    bool isBlocked(int y, int startX, int endX);
+
+    //////////////////////////////////////////////// ----- Level loading ----- //
     /**
      * Loads a TMX level from a json file
      * @param filename the json file from which to load the level
@@ -137,13 +140,14 @@ public:
      */
     bool loadLayer(const std::string& layerName, const rapidjson::Value& data,
                    int width, int height);
+
     /**
      * Deletes a Layer from the LayerList
      * @param name a string key for the Layer to remove from LayerList
      */
     void clearLayer(const std::string& name);
 
-    // ----- Rendering ----- //
+    ///////////////////////////////////////////////////// ----- Rendering ----- //
     /**
      * Renders the level to the screen
      */
