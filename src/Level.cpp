@@ -7,12 +7,6 @@ Level::Level()
     tileSizeY = (2 * SCREEN_Y) / TILES_ON_SCREEN_Y;
     NumVertices = 6;
     initGL();
-
-    // TODO: temp
-    glGenTextures(1, &tex);
-    Util::loadTexture(tex, "res/test-tileset/grass-tiles-2-small.png");
-    //Util::loadTexture(tex, "res/col-test.png");
-
 }
 
 
@@ -32,9 +26,7 @@ Level::initGL()
     glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[ElementArrayBuffer]);
 
-    // TODO: move to shader object
-    shaderProgram = Util::createProgramFromShaders("src/shaders/level.v.glsl",
-                    "src/shaders/level.f.glsl");
+    shaderProgram = Shader::getInstance()->get("level");
     glUseProgram(shaderProgram);
 
     glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float),
@@ -91,7 +83,8 @@ Level::render()
 
     glUseProgram(shaderProgram);
     glBindVertexArray(vao);
-    glBindTexture(GL_TEXTURE_2D, tex);
+    // need to use the right texture
+    //glBindTexture(GL_TEXTURE_2D, tex);
 
     // TODO: do this for each layer
     // TODO: will need to do them in the correct order so that bg is behind fg
@@ -230,6 +223,12 @@ Level::useTextureFor(int tmxGid)
         if ((texture.firstGid <= tmxGid) && (texture.lastGid >= tmxGid)) {
             // --- calculate texcoords
             // TODO: make this its own method?
+            // LEFT OFF HERE
+            // this isn't working
+            // one texture per layer
+            // probably combine all textures into one large sprite
+            glBindTexture(GL_TEXTURE_2D, texture.textureId);
+
             int row = gid / texture.numCols;
             int col = gid % texture.numCols;
             int tw = texture.tileWidth;

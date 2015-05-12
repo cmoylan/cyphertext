@@ -93,7 +93,7 @@ Level::loadTileset(const rapidjson::Value& data)
     //	return false;
     //}
 
-    //Util::loadTexture(tex, filename);
+    Util::loadTexture(tex, filename);
 
     int firstGid = data["firstgid"].GetInt();
     int w = data["imagewidth"].GetInt();
@@ -106,7 +106,7 @@ Level::loadTileset(const rapidjson::Value& data)
     float scaleFactorX = 1.f / (float) w;
     float scaleFactorY = 1.f / (float) h;
 
-    LevelTexture levelTexture = { tex, firstGid, lastGid, w, h, tw, th, numRows, numCols, scaleFactorX, scaleFactorY };
+    LevelTexture levelTexture = { filename, tex, firstGid, lastGid, w, h, tw, th, numRows, numCols, scaleFactorX, scaleFactorY };
     textures[layername] = levelTexture;
 
     return true;

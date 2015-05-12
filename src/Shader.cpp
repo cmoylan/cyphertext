@@ -8,6 +8,7 @@ Shader::Shader()
     set("texturedSquare",
         "src/shaders/texturedSquare.v.glsl",
         "src/shaders/texturedSquare.f.glsl");
+    set("level", "src/shaders/level.v.glsl", "src/shaders/level.f.glsl");
 }
 
 

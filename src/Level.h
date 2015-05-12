@@ -31,7 +31,7 @@ struct Layer {
 };
 
 struct LevelTexture {
-    //const std::string filename;
+    std::string filename; // remove if needed
     GLuint textureId;
     int firstGid;
     int lastGid;
