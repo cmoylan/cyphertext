@@ -6,6 +6,7 @@ Level::Level()
     tileSizeX = (2 * SCREEN_X) / TILES_ON_SCREEN_X;
     tileSizeY = (2 * SCREEN_Y) / TILES_ON_SCREEN_Y;
     NumVertices = 6;
+
     initGL();
 }
 
@@ -42,16 +43,18 @@ Level::initGL()
 }
 
 
+// Get a range of X's at a certain Y
+// Convert those into platform array positions
+// Check to see if there are platforms at given positions
+// TODO: store everything in the same format
 bool
 Level::isBlocked(int y, int startX, int endX)
 {
-    // TODO: store everything in the same format
-
+    if (y <= -SCREEN_Y)  {
+        return true;
+    }
     // assume each tile is 10 wide - move this to a constant or calculate it
-
-    // convert those into 2 col positions
-    // check the array at those 2 places
-    // that's it
+    // TODO: magic numbers
     int col1 = (startX + 100) / 10;
     int col2 = (endX + 100) / 10;
     int row = ((-1 * y) + 100) / 10;
@@ -83,8 +86,10 @@ Level::render()
 
     glUseProgram(shaderProgram);
     glBindVertexArray(vao);
-    // need to use the right texture
-    //glBindTexture(GL_TEXTURE_2D, tex);
+    // TODO: This is a shim for now, need to correctly load the textures once
+    // per render cycle
+    GLuint texId = textures.find("grass-tiles-2-small")->second.textureId;
+    glBindTexture(GL_TEXTURE_2D, texId);
 
     // TODO: do this for each layer
     // TODO: will need to do them in the correct order so that bg is behind fg
@@ -227,7 +232,6 @@ Level::useTextureFor(int tmxGid)
             // this isn't working
             // one texture per layer
             // probably combine all textures into one large sprite
-            glBindTexture(GL_TEXTURE_2D, texture.textureId);
 
             int row = gid / texture.numCols;
             int col = gid % texture.numCols;

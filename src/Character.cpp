@@ -97,38 +97,25 @@ Character::update()
         jumping = false;
     }
 
-    // if origin.x and origin.x + size.x
-    // if any of that range coincides with the ranges
-    // of the platforms, stop falling
-    if (game->level->isBlocked(origin.y, origin.x, (origin.x + size.x))) {
-        // can't fall, stop falling
-        //jumping = false;
-        //falling = false;
-        //printf("falling check is true for: y: %d, x: %d\n", origin.y, origin.x);
-    }
-    //continue falling
-    else {
+    // if the position under the player is blocked, do not fall
+    // if the position under the player is not blocked, start falling
+    bool canFall = !game->level->isBlocked(origin.y - 1, origin.x,
+                                           (origin.x + size.x));
 
-        // fall if we're not off screen
-        if (origin.y > -SCREEN_Y) {
-            falling = true;
-
-            if (fallVelocity < FALL_VELOCITY_MAX) {
-                fallVelocity += FALLY_ACCELERATION;
-            }
-            origin.y -= fallVelocity;
+    // fall
+    if (canFall) { //(origin.y > -SCREEN_Y) {
+        falling = true;
+        if (fallVelocity < FALL_VELOCITY_MAX) {
+            fallVelocity += FALLY_ACCELERATION;
         }
-
-        // stop falling if we are off screen
-        // NOTE: won't need this is all levels have floors
-        //       or could use this to detect death - if they fell in a hole
-        if (falling && origin.y <= -SCREEN_Y) {
-            falling = false;
-            fallVelocity = 0;
-            origin.y = -SCREEN_Y;
-        }
+        origin.y -= fallVelocity;
+        //printf("origin.y and fallVelocity: %d %d\n", origin.y, fallVelocity);
     }
 
-
-
+    // stop falling
+    if (falling && !canFall) { //origin.y <= -SCREEN_Y) {
+        falling = false;
+        fallVelocity = 0;
+        //origin.y = -SCREEN_Y;
+    }
 }
