@@ -1,7 +1,10 @@
 #include "Game.h"
 
 
-Game::Game() { }
+Game::Game() {
+    playerInputX = 0;
+    playerInputY = 0;
+}
 
 
 void

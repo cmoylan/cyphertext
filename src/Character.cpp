@@ -69,9 +69,16 @@ Character::jump()
 void
 Character::move(int x, int y)
 {
+    // Don't move if no direction information is given
+    if (x == 0 && y == 0) {
+        return;
+    }
+
     int newX = origin.x + (x * CHARACTER_MOVE_SIZE);
     int newY = origin.y + (y * CHARACTER_MOVE_SIZE);
 
+    // TODO: check if level is blocked at the desired location
+    // right now this just prevents the character from wandering off screen
     if ((newX >= -SCREEN_X) && ((newX + size.x) <= SCREEN_X)) {
         origin.x = newX;
     }
