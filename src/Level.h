@@ -56,6 +56,7 @@ class Level {
 
     float tileSizeX, tileSizeY;
 
+    // TODO: standardize naming on these
     enum VAO_IDs { Triangles, NumVAOs };
     enum Buffer_IDs { ArrayBuffer, ElementArrayBuffer, NumBuffers };
     enum Attrib_IDs { vPosition = 0, vTexPosition = 0 };
@@ -83,6 +84,7 @@ public:
     void initGL();
 
     // TODO: maybe this should take a vector and a direction
+    // isBlocked(Vector2D origin, Vector2D size)
     /**
      * Determines if a given position is a platform
      * @param y the Y coordinate

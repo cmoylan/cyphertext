@@ -49,8 +49,8 @@ class Game {
 
     Menu *menu;
 
-    int playerInputX;
-    int playerInputY;
+    short playerInputX;
+    short playerInputY;
 
 public:
     Level *level;
