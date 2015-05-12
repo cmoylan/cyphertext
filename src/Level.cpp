@@ -47,27 +47,27 @@ Level::initGL()
 // Convert those into platform array positions
 // Check to see if there are platforms at given positions
 // TODO: store everything in the same format
+// TODO: some weird bugs at the right edge of screen
 bool
 Level::isBlocked(int y, int startX, int endX)
 {
+    // Don't fall off the screen...
     if (y <= -SCREEN_Y)  {
         return true;
     }
     // assume each tile is 10 wide - move this to a constant or calculate it
     // TODO: magic numbers
+    // TODO: check the rounding here...might be causing bugs
     int col1 = (startX + 100) / 10;
     int col2 = (endX + 100) / 10;
     int row = ((-1 * y) + 100) / 10;
-    //printf("coords are: %d: %d..%d - checking %d: %d..%d\n", y, startX, endX, row, col1, col2);
 
     // need to detect the presence of tiles in the platform layers
     Layer& layer = layers.find("platforms")->second;
     int gid1 = layer.tiles[(row * 20) + col1];
     int gid2 = layer.tiles[(row * 20) + col2];
-    //printf("gids are: %d %d\n", gid1, gid2);
 
     if (gid1 != 0 || gid2 != 0) {
-        //printf("returning true for %d: %d..%d\n", y, startX, endX);
         return true;
     }
     return false;

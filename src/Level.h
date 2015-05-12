@@ -16,7 +16,6 @@
 
 #define BUFFER_OFFSET(offset) ((void *)(offset))
 
-//using namespace rapidjson;
 /**
  * TMX Subset:
  * Layer 0: Platforms - surfaces the player can walk on
@@ -45,41 +44,15 @@ struct LevelTexture {
     float scaleFactorY;
 };
 
-struct Point {
-    GLfloat x;
-    GLfloat y;
-};
-
-//struct LevelVertex {
-//    GLfloat x;
-//    GLflost y;
-//    GLfloat tx;
-//    GLfloat ty;
-//};
-
-struct TexCoord {
-    Point tl;
-    Point tr;
-    Point bl;
-    Point br;
-};
-
 typedef std::map<std::string, LevelTexture> TextureList;
 typedef std::map<std::string, Layer> LayerList;
 typedef std::map<int, TexCoord> GidTexCoords;
 
 
 class Level {
-
-    GLuint vao, tex, uniTrans;
+    // TODO:  move this to the enum
+    GLuint vao;
     GLuint shaderProgram;
-
-    // new vars
-    GLint attributeCoord;
-    GLint uniformTex;
-    GLint uniformColor;
-    GLuint vbo;
-    // end new vars
 
     float tileSizeX, tileSizeY;
 
@@ -90,6 +63,7 @@ class Level {
     GLuint Buffers[NumBuffers];
     GLuint NumVertices;
 
+    // cache for calculated texcoords
     GidTexCoords gidTexCoords;
 
 public:
@@ -108,7 +82,19 @@ public:
 
     void initGL();
 
-    // maybe this should take a vector and a direction
+    // TODO: maybe this should take a vector and a direction
+    /**
+     * Determines if a given position is a platform
+     * @param y the Y coordinate
+     * @param startX the beginning X coordinate
+     * @param endX the ending X coordinate
+     * @return a boolean indicating if the position is a platform
+     *
+     * This method takes a range of X coordinates and a single Y
+     * coordinate. If any part of the range is blocked by a platform
+     * it will return true. However, if no part of the range is blocked,
+     * the character can and should fall.
+     */
     bool isBlocked(int y, int startX, int endX);
 
     //////////////////////////////////////////////// ----- Level loading ----- //

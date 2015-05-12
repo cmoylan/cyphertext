@@ -1,5 +1,7 @@
 #pragma once
 
+#include "OpenGL.h"
+
 // window
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
@@ -45,12 +47,32 @@
 #define BASE_SCORE_STRING "Score: "
 
 
-typedef struct {
+// TODO: move to a new file separate from constants?
+struct Vector2D {
     int x;
     int y;
-} Vector2D;
+};
 
-typedef struct {
+struct Rectangle {
     Vector2D origin;
     Vector2D size;
-} Rectangle;
+};
+
+struct Point {
+    GLfloat x;
+    GLfloat y;
+};
+
+//struct LevelVertex {
+//    GLfloat x;
+//    GLflost y;
+//    GLfloat tx;
+//    GLfloat ty;
+//};
+
+struct TexCoord {
+    Point tl;
+    Point tr;
+    Point bl;
+    Point br;
+};

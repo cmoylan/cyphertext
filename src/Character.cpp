@@ -103,7 +103,7 @@ Character::update()
                                            (origin.x + size.x));
 
     // fall
-    if (canFall) { //(origin.y > -SCREEN_Y) {
+    if (canFall) {
         falling = true;
         if (fallVelocity < FALL_VELOCITY_MAX) {
             fallVelocity += FALLY_ACCELERATION;
@@ -113,9 +113,8 @@ Character::update()
     }
 
     // stop falling
-    if (falling && !canFall) { //origin.y <= -SCREEN_Y) {
+    if (falling && !canFall) {
         falling = false;
         fallVelocity = 0;
-        //origin.y = -SCREEN_Y;
     }
 }
