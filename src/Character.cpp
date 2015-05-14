@@ -79,14 +79,27 @@ Character::move(int x, int y)
     int newY = origin.y + (y * CHARACTER_MOVE_SIZE);
 
     // TODO: check if level is blocked at the desired location
+    // FIXME: don't need to check if value is 0
     // right now this just prevents the character from wandering off screen
-    if ((newX >= -SCREEN_X) && ((newX + size.x) <= SCREEN_X)) {
+    //if ((newX >= -SCREEN_X) && ((newX + size.x) <= SCREEN_X)) {
+    //printf("---");
+    if (!game->level->isBlocked(newX, origin.y, size)) {
         origin.x = newX;
     }
-    if ((newY >= -SCREEN_Y) && ((newY + size.y) <= SCREEN_Y)) {
+    //if ((newY >= -SCREEN_Y) && ((newY + size.y) <= SCREEN_Y)) {
+    if (!game->level->isBlocked(origin.x, newY, size)) {
         origin.y = newY;
     }
     //printf("moving to %d, %d\n", origin.x, origin.y);
+
+    // if can move
+//     if (level->isBlocked(x+1, y, size) {
+//       allow x move to go through
+//     }
+//     if (level->isBlocked(x, y+1, size) {
+//       allow y move to go through
+//     }
+
 }
 
 
@@ -107,8 +120,8 @@ Character::update()
 
     // if the position under the player is blocked, do not fall
     // if the position under the player is not blocked, start falling
-    bool canFall = !game->level->isBlocked(origin.y - 1, origin.x,
-                                           (origin.x + size.x));
+    bool canFall = game->level->canFall(origin.y - 1, origin.x,
+                                        (origin.x + size.x));
 
     // fall
     if (canFall) {

@@ -17,6 +17,37 @@ Level::~Level()
 }
 
 
+// Get a range of X's at a certain Y
+// Convert those into platform array positions
+// Check to see if there are platforms at given positions
+// TODO: store everything in the same format
+bool
+Level::canFall(int y, int startX, int endX)
+{
+    // Don't fall off the screen...
+    if (y <= -SCREEN_Y)  {
+        return false;
+    }
+    // assume each tile is 10 wide - move this to a constant or calculate it
+    // TODO: magic numbers
+    // TODO: need a test for this to make sure everything is correct
+    int col1 = (startX + 100) / (int) tileSizeX;
+    int col2 = (endX + 99) / (int) tileSizeX;
+    int row = ((-1 * y) + 100) / (int) tileSizeY;
+
+    // need to detect the presence of tiles in the platform layers
+    Layer& layer = layers.find("platforms")->second;
+    // TODO: magic number - number of cols in each row
+    int gid1 = layer.tiles[(row * 20) + col1];
+    int gid2 = layer.tiles[(row * 20) + col2];
+
+    if (gid1 != 0 || gid2 != 0) {
+        return false;
+    }
+    return true;
+}
+
+
 void
 Level::initGL()
 {
@@ -43,30 +74,22 @@ Level::initGL()
 }
 
 
-// Get a range of X's at a certain Y
-// Convert those into platform array positions
-// Check to see if there are platforms at given positions
-// TODO: store everything in the same format
+// TODO: kind of works, but really buggy
 bool
-Level::isBlocked(int y, int startX, int endX)
+Level::isBlocked(int originX, int originY, Vector2D size)
 {
-    // Don't fall off the screen...
-    if (y <= -SCREEN_Y)  {
-        return true;
-    }
-    // assume each tile is 10 wide - move this to a constant or calculate it
-    // TODO: magic numbers
-    // TODO: need a test for this to make sure everything is correct
-    int col1 = (startX + 100) / 10;
-    int col2 = (endX + 99) / 10;
-    int row = ((-1 * y) + 100) / 10;
-
-    // need to detect the presence of tiles in the platform layers
+    // TODO: store int versions of tileSizex/y if we're constantly casting
+    int row1 = (originY + 100) / (int) tileSizeY;
+    int row2 = (originY + size.y + 99) / (int) tileSizeY;
+    int col1 = (originX + 100) / (int) tileSizeX;
+    int col2 = (originX + size.x + 99) / (int) tileSizeX;
+    //printf("checking %d %d %d %d\n", row1, row2, col1, col2);
     Layer& layer = layers.find("platforms")->second;
-    int gid1 = layer.tiles[(row * 20) + col1];
-    int gid2 = layer.tiles[(row * 20) + col2];
-
-    if (gid1 != 0 || gid2 != 0) {
+    // TODO: magic numbers
+    if (layer.tiles[(row1 * 20) + col1] != 0 ||
+            layer.tiles[(row1 * 20) + col2] != 0 ||
+            layer.tiles[(row2 * 20) + col1] != 0 ||
+            layer.tiles[(row2 * 20) + col2] != 0) {
         return true;
     }
     return false;

@@ -85,8 +85,6 @@ public:
 
     /////////////////////////////////////////// ----- Level information ----- //
 
-    // TODO: maybe this should take a vector and a direction
-    // isBlocked(Vector2D origin, Vector2D size)
     /**
      * Determines if a given position is a platform
      * @param y the Y coordinate
@@ -96,10 +94,19 @@ public:
      *
      * This method takes a range of X coordinates and a single Y
      * coordinate. If any part of the range is blocked by a platform
-     * it will return true. However, if no part of the range is blocked,
+     * it will return false. However, if no part of the range is blocked,
      * the character can and should fall.
      */
-    bool isBlocked(int y, int startX, int endX);
+    bool canFall(int y, int startX, int endX);
+
+    /**
+     * Determines if a space in the level can be occupied
+     */
+    bool isBlocked(int originX, int originY, Vector2D size);
+
+    // canScroll
+
+    // scrollTo
 
     /////////////////////////////////////////////// ----- Level loading ----- //
     /**
