@@ -78,7 +78,7 @@ Character::move(int x, int y)
     int newX = origin.x + (x * CHARACTER_MOVE_SIZE);
     int newY = origin.y + (y * CHARACTER_MOVE_SIZE);
 
-    // check if level is blocked at the desired location
+    // TODO: check if level is blocked at the desired location
     // right now this just prevents the character from wandering off screen
     if ((newX >= -SCREEN_X) && ((newX + size.x) <= SCREEN_X)) {
         origin.x = newX;

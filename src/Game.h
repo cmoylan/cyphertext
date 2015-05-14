@@ -49,6 +49,7 @@ class Game {
 
     Menu *menu;
 
+    // TODO: look up if the compiler will optimize this as a regular int
     short playerInputX;
     short playerInputY;
 

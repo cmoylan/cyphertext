@@ -39,6 +39,15 @@ public:
 
     void jump();
 
+    /**
+     * Move the character in a direction in 2-dimensional space
+     * @param x the direction (-1, 0, 1) to move along the x axis
+     * @param y the direction (-1, 0, 1) to move along the y axis
+     *
+     * Takes a 2D direction and attempts to move the character accordingly.
+     * This will interogate the current level to determine if the
+     * desired new location is clear and only move if it is.
+     */
     void move(int x, int y);
 
     virtual void hit();

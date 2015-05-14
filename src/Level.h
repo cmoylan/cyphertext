@@ -83,6 +83,8 @@ public:
 
     void initGL();
 
+    /////////////////////////////////////////// ----- Level information ----- //
+
     // TODO: maybe this should take a vector and a direction
     // isBlocked(Vector2D origin, Vector2D size)
     /**
@@ -99,7 +101,7 @@ public:
      */
     bool isBlocked(int y, int startX, int endX);
 
-    //////////////////////////////////////////////// ----- Level loading ----- //
+    /////////////////////////////////////////////// ----- Level loading ----- //
     /**
      * Loads a TMX level from a json file
      * @param filename the json file from which to load the level
@@ -135,7 +137,7 @@ public:
      */
     void clearLayer(const std::string& name);
 
-    ///////////////////////////////////////////////////// ----- Rendering ----- //
+    /////////////////////////////////////////////////// ----- Rendering ----- //
     /**
      * Renders the level to the screen
      */
