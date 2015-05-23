@@ -28,7 +28,7 @@
 #define INPUT_WEIGHT_Y 1
 #define JUMP_VELOCITY_MAX 10
 #define JUMP_DECAY 1
-#define FALLY_ACCELERATION 1
+#define FALL_Y_ACCELERATION 1
 #define FALL_VELOCITY_MAX 5
 
 // entities

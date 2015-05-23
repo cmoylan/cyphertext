@@ -78,6 +78,7 @@ Level::initGL()
 bool
 Level::isBlocked(int originX, int originY, Vector2D size)
 {
+    // TODO: need unit tests for thie one
     // TODO: store int versions of tileSizex/y if we're constantly casting
     int row1 = (originY + 100) / (int) tileSizeY;
     int row2 = (originY + size.y + 99) / (int) tileSizeY;
