@@ -161,6 +161,7 @@ public:
      * Sends level debugging information to stdout
      */
     void print();
+    void printPlatforms();
 
     // DEPRECATED
     void unloadTextures();

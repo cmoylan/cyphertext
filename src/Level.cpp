@@ -2,7 +2,6 @@
 
 Level::Level()
 {
-
     tileSizeX = (2 * SCREEN_X) / TILES_ON_SCREEN_X;
     tileSizeY = (2 * SCREEN_Y) / TILES_ON_SCREEN_Y;
     NumVertices = 6;
@@ -12,6 +11,7 @@ Level::Level()
 Level::~Level()
 {
     // clear textures
+    // erase other things you set up
 }
 
 
@@ -78,6 +78,7 @@ Level::isBlocked(int originX, int originY, Vector2D size)
 {
     // TODO: need unit tests for thie one
     // TODO: store int versions of tileSizex/y if we're constantly casting
+    // TODO: magic numbers
     int row1 = (originY + 100) / (int) tileSizeY;
     int row2 = (originY + size.y + 99) / (int) tileSizeY;
     int col1 = (originX + 100) / (int) tileSizeX;
@@ -190,26 +191,12 @@ Level::print()
     printf("tilewidth: %d, tileheight: %d\n", tileWidth, tileHeight);
     //printf("platform count: %d\n", platformCount);
 
-    // ----- print out the level ----- //
-    std::vector<int>::iterator p;
-    TextureList::iterator t;
-    int i, row;
-
-    // do this for each layer
-    Layer& layer = layers.find("platforms")->second;
-    row = 0;
-    printf("\n[%d]:  ", row);
-    for (p = layer.tiles.begin(), i = 1; p != layer.tiles.end(); ++p, ++i) {
-        printf("%d | ", *p);
-        if ((i % mapWidth == 0) && (row < (mapHeight - 1))) {
-            ++row;
-            printf("\n[%d]:  ", row);
-        }
-    }
-    printf("\n");
-    printf("tile count is: %d\n", layer.tileCount);
+    // TODO: do this for each layer
+    // TODO: rename to printLayers
+    printPlatforms();
 
     // iterate over tilsets
+    TextureList::iterator t;
     for (t = textures.begin(); t != textures.end(); ++t) {
         LevelTexture& tex = t->second;
         printf("\ntileset: %s \n", t->first.c_str());
@@ -221,6 +208,28 @@ Level::print()
     }
 
     printf("\n");
+}
+
+
+void
+Level::printPlatforms()
+{
+    // ----- print out the level ----- //
+    Layer& layer = layers.find("platforms")->second;
+    std::vector<int>::iterator p;
+    int i, row;
+    row = 0;
+
+    printf("\n[%d]:  ", row);
+    for (p = layer.tiles.begin(), i = 1; p != layer.tiles.end(); ++p, ++i) {
+        printf("%d | ", *p);
+        if ((i % mapWidth == 0) && (row < (mapHeight - 1))) {
+            ++row;
+            printf("\n[%d]:  ", row);
+        }
+    }
+    printf("\n");
+    printf("tile count is: %d\n", layer.tileCount);
 }
 
 

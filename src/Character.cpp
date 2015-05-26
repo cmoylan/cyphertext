@@ -17,7 +17,8 @@ Character::Character(Game* game, std::string texture, Vector2D position)
     jumping = false;
     jumpVelocity = 0;
     falling = false;
-    fallVelocity = FALL_Y_ACCELERATION; // technically we're always trying to fall into the ground
+    fallVelocity =
+        FALL_Y_ACCELERATION; // technically we're always trying to fall into the ground
     // ---
 }
 
@@ -130,22 +131,22 @@ Character::update()
         if (fallVelocity < FALL_VELOCITY_MAX) {
             fallVelocity += FALL_Y_ACCELERATION;
         }
-	origin.y -= fallVelocity;
-	//printf("falling: y is %d\n", origin.y);
+        origin.y -= fallVelocity;
+        //printf("falling: y is %d\n", origin.y);
     }
 
     // stop falling
     if (falling && !canFall) {
         falling = false;
-	// try to fall a little bit more
-	//for (int v = fallVelocity; v > 0; v--) {
-	//    // i don't think is blocked works
-	//    if (!game->level->isBlocked(origin.x, (origin.y - v), size)) {
-	//	printf("fall a little bit more - v is %d\n", v);
-	//	origin.y -= v;
-	//	break;
-	//    }
-	//}
+        // try to fall a little bit more
+        //for (int v = fallVelocity; v > 0; v--) {
+        //    // i don't think is blocked works
+        //    if (!game->level->isBlocked(origin.x, (origin.y - v), size)) {
+        //	printf("fall a little bit more - v is %d\n", v);
+        //	origin.y -= v;
+        //	break;
+        //    }
+        //}
         fallVelocity = FALL_Y_ACCELERATION; // reset
     }
 
