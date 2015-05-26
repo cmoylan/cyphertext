@@ -26,6 +26,7 @@ Game::init()
     menu = new Menu();
 
     level = new Level();
+    level->initGL();
     level->loadFromJson("res/simple-level.json");
     //level->print();
 }

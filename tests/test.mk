@@ -1,12 +1,11 @@
 TEST_DIR = tests
-TEST_OBJS = ./tests/bullet_registry_test.h
-SRC_OBJS = build/*.o
+TEST_OBJS = ./tests/level_test.h
+# Get all sources except main.cpp
+TEST_SRC_OBJS = $(patsubst src/main.cpp,,$(wildcard src/*.cpp))
 
-CFLAGS = -DTEST_MODE
+TEST_CFLAGS = -DTEST_MODE -I./include/cxxtest-4.3 -I./src -I./src
 
-TEST_INCLUDE_PATHS = -I./$(TEST_DIR)/cxxtest-4.3 -I./src
-
-TESTGEN = ./$(TEST_DIR)/cxxtest-4.3/bin/cxxtestgen
+TESTGEN = ./include/cxxtest-4.3/bin/cxxtestgen
 
 TEST_RUNNER = ./$(TEST_DIR)/runner
 TEST_RUNNER_SRC = $(TEST_RUNNER).cpp
@@ -16,9 +15,8 @@ test: test_compile
 	$(TEST_RUNNER)
 
 test_compile: test_parse
-	$(CC) $(TEST_RUNNER_SRC) $(SRC_OBJS) $(INCLUDE_PATHS) \
-	$(TEST_INCLUDE_PATHS) $(LIBRARY_PATHS) $(LINKER_FLAGS) \
-	$(CFLAGS) -o $(TEST_RUNNER)
+	$(CC) $(TEST_CFLAGS) $(TEST_SRC_OBJS) $(TEST_RUNNER_SRC) \
+	-o $(TEST_RUNNER) $(LDLIBS)
 
 test_parse: test_clean
 	$(TESTGEN) --runner=ParenPrinter \

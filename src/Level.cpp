@@ -6,8 +6,6 @@ Level::Level()
     tileSizeX = (2 * SCREEN_X) / TILES_ON_SCREEN_X;
     tileSizeY = (2 * SCREEN_Y) / TILES_ON_SCREEN_Y;
     NumVertices = 6;
-
-    initGL();
 }
 
 
