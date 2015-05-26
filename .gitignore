@@ -2,6 +2,10 @@ build/*
 engine
 *~
 
+# Testing stuff
+tests/runner.cpp
+tests/runner
+
 # autoconf stuff
 Makefile
 Tupfile
