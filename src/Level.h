@@ -73,12 +73,15 @@ public:
     int mapHeight;
     int tileWidth;
     int tileHeight;
+    // not in pixels
+    int tilesOnScreenX;
+    int tilesOnScreenY;
     Vector2D camera;
 
     LayerList layers;
     TextureList textures;
 
-    Level();
+    Level(int tilesOnScreenX, int tilesOnScreenY);
     ~Level();
 
     void initGL();
