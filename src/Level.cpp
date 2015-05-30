@@ -1,9 +1,12 @@
 #include "Level.h"
 
-Level::Level()
+Level::Level(int tilesOnScreenX, int tilesOnScreenY)
 {
-    tileSizeX = (2 * SCREEN_X) / TILES_ON_SCREEN_X;
-    tileSizeY = (2 * SCREEN_Y) / TILES_ON_SCREEN_Y;
+    this->tilesOnScreenX = tilesOnScreenX;
+    this->tilesOnScreenY = tilesOnScreenY;
+    tileSizeX = (2 * SCREEN_X) / tilesOnScreenX;
+    tileSizeY = (2 * SCREEN_Y) / tilesOnScreenY;
+    printf("tilesize x y is: %f %f\n", tileSizeX, tileSizeY);
     NumVertices = 6;
 }
 
@@ -79,17 +82,18 @@ Level::isBlocked(int originX, int originY, Vector2D size)
     // TODO: need unit tests for thie one
     // TODO: store int versions of tileSizex/y if we're constantly casting
     // TODO: magic numbers
-    int row1 = (originY + 100) / (int) tileSizeY;
-    int row2 = (originY + size.y + 99) / (int) tileSizeY;
+    int row1 = (((-1 * originY) + 100) / (int) tileSizeY) - 1;
+    int row2 = (((-1*originY) + size.y + 99) / (int) tileSizeY) - 1;
     int col1 = (originX + 100) / (int) tileSizeX;
     int col2 = (originX + size.x + 99) / (int) tileSizeX;
-    //printf("checking %d %d %d %d\n", row1, row2, col1, col2);
+
+    printf("checking row1 %d row2 %d col1 %d col2 %d\n", row1, row2, col1, col2);
     Layer& layer = layers.find("platforms")->second;
     // TODO: magic numbers
-    if (layer.tiles[(row1 * 20) + col1] != 0 ||
-            layer.tiles[(row1 * 20) + col2] != 0 ||
-            layer.tiles[(row2 * 20) + col1] != 0 ||
-            layer.tiles[(row2 * 20) + col2] != 0) {
+    if (layer.tiles[(row1 * tilesOnScreenX) + col1] != 0 ||
+            layer.tiles[(row1 * tilesOnScreenX) + col2] != 0 ||
+            layer.tiles[(row2 * tilesOnScreenX) + col1] != 0 ||
+            layer.tiles[(row2 * tilesOnScreenX) + col2] != 0) {
         return true;
     }
     return false;

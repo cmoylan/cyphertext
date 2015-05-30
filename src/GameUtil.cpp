@@ -25,7 +25,7 @@ Game::init()
 
     menu = new Menu();
 
-    level = new Level();
+    level = new Level(TILES_ON_SCREEN_X, TILES_ON_SCREEN_Y);
     level->initGL();
     level->loadFromJson("res/simple-level.json");
     //level->print();
