@@ -111,6 +111,8 @@ public:
 
     // scrollTo
 
+    int valueAt(int x, int y);
+
     /////////////////////////////////////////////// ----- Level loading ----- //
     /**
      * Loads a TMX level from a json file
