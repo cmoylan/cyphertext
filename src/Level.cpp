@@ -82,7 +82,7 @@ Level::isBlocked(int originX, int originY, Vector2D size)
     // TODO: store int versions of tileSizex/y if we're constantly casting
     // TODO: magic numbers
     int row1 = (((-1 * originY) + 100) / (int) tileSizeY) - 1;
-    int row2 = (((-1 * originY) + size.y + 99) / (int) tileSizeY) - 1;
+    int row2 = (originY + size.y + 99) / (int) tileSizeY;
     int col1 = (originX + 100) / (int) tileSizeX;
     int col2 = (originX + size.x + 99) / (int) tileSizeX;
 
