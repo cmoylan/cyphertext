@@ -16,6 +16,7 @@ test: test_compile
 
 test_compile: test_parse
 	$(CC) $(TEST_CFLAGS) $(TEST_SRC_OBJS) $(TEST_RUNNER_SRC) \
+	$(CFLAGS) $(LIBS) \
 	-o $(TEST_RUNNER) $(LDLIBS)
 
 test_parse: test_clean
