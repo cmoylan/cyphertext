@@ -6,7 +6,7 @@ Level::Level(int tilesOnScreenX, int tilesOnScreenY)
     this->tilesOnScreenY = tilesOnScreenY;
     tileSizeX = (2 * SCREEN_X) / tilesOnScreenX;
     tileSizeY = (2 * SCREEN_Y) / tilesOnScreenY;
-    printf("tilesize x y is: %f %f\n", tileSizeX, tileSizeY);
+    //printf("tilesize x y is: %f %f\n", tileSizeX, tileSizeY);
     NumVertices = 6;
 }
 
@@ -86,7 +86,7 @@ Level::isBlocked(int originX, int originY, Vector2D size)
     int col1 = (originX + 100) / (int) tileSizeX;
     int col2 = (originX + size.x + 99) / (int) tileSizeX;
 
-    printf("checking row1 %d row2 %d col1 %d col2 %d  ", row1, row2, col1, col2);
+    //printf("checking row1 %d row2 %d col1 %d col2 %d  ", row1, row2, col1, col2);
     Layer& layer = layers.find("platforms")->second;
     // TODO: magic numbers
     if (layer.tiles[(row1 * tilesOnScreenX) + col1] != 0 ||
@@ -94,13 +94,20 @@ Level::isBlocked(int originX, int originY, Vector2D size)
             layer.tiles[(row2 * tilesOnScreenX) + col1] != 0 ||
             layer.tiles[(row2 * tilesOnScreenX) + col2] != 0) {
 
-        printf(" - conditional vals: %d %d %d %d",
-               layer.tiles[(row1 * tilesOnScreenX) + col1],
-               layer.tiles[(row1 * tilesOnScreenX) + col2],
-               layer.tiles[(row2 * tilesOnScreenX) + col1],
-               layer.tiles[(row2 * tilesOnScreenX) + col2]);
+        //printf(" - conditional vals: %d %d %d %d",
+        //       layer.tiles[(row1 * tilesOnScreenX) + col1],
+        //       layer.tiles[(row1 * tilesOnScreenX) + col2],
+        //       layer.tiles[(row2 * tilesOnScreenX) + col1],
+        //       layer.tiles[(row2 * tilesOnScreenX) + col2]);
         return true;
     }
+//    if (valueAt(originX, originY) != 0 ||
+//       valueAt(originX + size.x, originY) != 0 ||
+//       valueAt(originX, originY + size.y) != 0 ||
+//       valueAt(originX + size.x, originY + size.y) != 0
+//    ) {
+//      return true;
+
     return false;
 }
 
@@ -188,7 +195,6 @@ Level::render()
     glDrawArrays(GL_TRIANGLES, 0, c / 4);
 
     glFlush(); // TODO: remove
-
 }
 
 
@@ -301,17 +307,13 @@ Level::useTextureFor(int tmxGid)
 int
 Level::valueAt(int x, int y)
 {
+    // TODO: magic numbers
     int row = (((-1 * y) + 100) / (int) tileSizeY);
     int col = (x + 100) / (int) tileSizeX;
 
-    printf("- checking row %d, col %d \n", row, col);
+    //printf("- checking row %d, col %d \n", row, col);
     // NOTE: assume platforms for now
     Layer& layer = layers.find("platforms")->second;
-    // TODO: magic numbers
-    //if (layer.tiles[(row1 * tilesOnScreenX) + col1] != 0 ||
-    //        layer.tiles[(row1 * tilesOnScreenX) + col2] != 0 ||
-    //        layer.tiles[(row2 * tilesOnScreenX) + col1] != 0 ||
-    //        layer.tiles[(row2 * tilesOnScreenX) + col2] != 0) {
-    //}
+
     return layer.tiles[(row * tilesOnScreenX) + col];
 }
