@@ -76,3 +76,5 @@ struct TexCoord {
     Point bl;
     Point br;
 };
+
+//"I never am really satisfied that I understand anything; because, understand it well as I may, my comprehension can only be an infinitesimal fraction of all I want to understand"  
