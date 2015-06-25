@@ -82,23 +82,34 @@ Level::isBlocked(int originX, int originY, Vector2D size)
     // TODO: store int versions of tileSizex/y if we're constantly casting
     // TODO: magic numbers
     int row1 = (((-1 * originY) + 100) / (int) tileSizeY) - 1;
-    int row2 = (originY + size.y + 99) / (int) tileSizeY;
+<<<<<<< HEAD
+    int row2 = (((-1 * originY) + size.y + 99) / (int) tileSizeY) - 1;
     int col1 = (originX + 100) / (int) tileSizeX;
     int col2 = (originX + size.x + 99) / (int) tileSizeX;
 
-    //printf("checking row1 %d row2 %d col1 %d col2 %d  ", row1, row2, col1, col2);
+    printf("checking row1 %d row2 %d col1 %d col2 %d  ", row1, row2, col1, col2);
+=======
+    int row2 = (((-1*originY) + size.y + 99) / (int) tileSizeY) - 1;
+    int col1 = (originX + 100) / (int) tileSizeX;
+    int col2 = (originX + size.x + 99) / (int) tileSizeX;
+
+    printf("checking row1 %d row2 %d col1 %d col2 %d\n", row1, row2, col1, col2);
+>>>>>>> ea14d99dcc48cb12a609453aef6b1b993cebe27f
     Layer& layer = layers.find("platforms")->second;
     // TODO: magic numbers
     if (layer.tiles[(row1 * tilesOnScreenX) + col1] != 0 ||
             layer.tiles[(row1 * tilesOnScreenX) + col2] != 0 ||
             layer.tiles[(row2 * tilesOnScreenX) + col1] != 0 ||
             layer.tiles[(row2 * tilesOnScreenX) + col2] != 0) {
+<<<<<<< HEAD
 
-        //printf(" - conditional vals: %d %d %d %d",
-        //       layer.tiles[(row1 * tilesOnScreenX) + col1],
-        //       layer.tiles[(row1 * tilesOnScreenX) + col2],
-        //       layer.tiles[(row2 * tilesOnScreenX) + col1],
-        //       layer.tiles[(row2 * tilesOnScreenX) + col2]);
+        printf(" - conditional vals: %d %d %d %d",
+               layer.tiles[(row1 * tilesOnScreenX) + col1],
+               layer.tiles[(row1 * tilesOnScreenX) + col2],
+               layer.tiles[(row2 * tilesOnScreenX) + col1],
+               layer.tiles[(row2 * tilesOnScreenX) + col2]);
+=======
+>>>>>>> ea14d99dcc48cb12a609453aef6b1b993cebe27f
         return true;
     }
     return false;
@@ -301,7 +312,7 @@ Level::useTextureFor(int tmxGid)
 int
 Level::valueAt(int x, int y)
 {
-    int row = (((-1 * y) + 99) / (int) tileSizeY);
+    int row = (((-1 * y) + 100) / (int) tileSizeY);
     int col = (x + 100) / (int) tileSizeX;
 
     printf("- checking row %d, col %d \n", row, col);

@@ -66,7 +66,7 @@ Game::initEntities()
     this->enemy = new Enemy(this, "res/enemy.png", position);
 
     position.y = 0;
-    this->character = new Character(this, "res/spaceship.png", position);
+    this->character = new Character(this, "res/red-square.png", position);
 }
 
 
