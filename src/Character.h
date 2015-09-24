@@ -38,6 +38,8 @@ public:
     void fire();
 
     void jump();
+    
+    void debug();
 
     /**
      * Move the character in a direction in 2-dimensional space
