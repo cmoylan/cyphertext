@@ -2,10 +2,6 @@
 
 #include <stdio.h>
 #include <vector>
-// TODO: Probably just move to entity
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include "OpenGL.h"
 #include "Util.h"

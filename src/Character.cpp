@@ -41,7 +41,7 @@ Character::center()
 void
 Character::debug()
 {
-    printf("--\nCharacter: origin: [%d, %d]\n--\n", origin.x, origin.y);
+  printf("--\nCharacter: origin: [%d, %d] Size: [%d, %d]\n--\n", origin.x, origin.y, size.x, size.y);
 }
 
 
