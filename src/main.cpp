@@ -15,7 +15,9 @@ main()
 
     game = new Game();
     game->init();
-    //debug();
+#   ifdef DEBUG
+    debug();
+#   endif
     game->run();
 
     return 0;
@@ -24,13 +26,12 @@ main()
 
 void debug()
 {
-    using namespace std;
+    printf("OpenGL version %s\n", glGetString(GL_VERSION));
+    printf("GLSL version %s \n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
     SDL_version compile_version;
     const SDL_version *link_version = Mix_Linked_Version();
     SDL_MIXER_VERSION(&compile_version);
-    cout<<"GLSL version " << glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
-    cout<<"OpenGL version " << glGetString(GL_VERSION) << endl;
     printf("compiled with SDL_mixer version: %d.%d.%d\n",
            compile_version.major,
            compile_version.minor,
@@ -39,5 +40,6 @@ void debug()
            link_version->major,
            link_version->minor,
            link_version->patch);
+
 }
 

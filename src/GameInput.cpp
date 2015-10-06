@@ -50,11 +50,13 @@ Game::handleKeyDown(SDL_Event* event)
         case SDLK_j:
             character->jump();
             break;
-	case SDLK_q:
-	    character->debug();
-	    break;
+#       ifdef DEBUG
+        case SDLK_q:
+            character->debug();
+            break;
+#       endif
         }
-	
+
     }
 
     // --- all states --- //

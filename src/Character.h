@@ -38,7 +38,7 @@ public:
     void fire();
 
     void jump();
-    
+
     void debug();
 
     /**

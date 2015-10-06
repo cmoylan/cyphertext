@@ -81,30 +81,6 @@ Level::isBlocked(int originX, int originY, Vector2D size)
     int sizeX = size.x - 1;
     int sizeY = size.y - 1;
 
-    // TODO: need unit tests for thie one
-    // TODO: store int versions of tileSizex/y if we're constantly casting
-    // TODO: magic numbers
-    //int row1 = (((-1 * originY) + 100) / (int) tileSizeY) - 1;
-    //int row2 = (originY + size.y + 99) / (int) tileSizeY;
-    //int col1 = (originX + 100) / (int) tileSizeX;
-    //int col2 = (originX + size.x + 99) / (int) tileSizeX;
-
-    ////printf("checking row1 %d row2 %d col1 %d col2 %d  ", row1, row2, col1, col2);
-    //Layer& layer = layers.find("platforms")->second;
-    //// TODO: magic numbers
-    //if (layer.tiles[(row1 * tilesOnScreenX) + col1] != 0 ||
-    //        layer.tiles[(row1 * tilesOnScreenX) + col2] != 0 ||
-    //        layer.tiles[(row2 * tilesOnScreenX) + col1] != 0 ||
-    //        layer.tiles[(row2 * tilesOnScreenX) + col2] != 0) {
-
-    //    //printf(" - conditional vals: %d %d %d %d",
-    //    //       layer.tiles[(row1 * tilesOnScreenX) + col1],
-    //    //       layer.tiles[(row1 * tilesOnScreenX) + col2],
-    //    //       layer.tiles[(row2 * tilesOnScreenX) + col1],
-    //    //       layer.tiles[(row2 * tilesOnScreenX) + col2]);
-    //    return true;
-    //}
-
     // possibly correct way
     //if (valueAt(originX, originY) != 0 ||
     //   valueAt(originX + size.x, originY) != 0 ||
@@ -112,24 +88,31 @@ Level::isBlocked(int originX, int originY, Vector2D size)
     //   valueAt(originX + size.x, originY + size.y) != 0
     //) {
 
-    // debug way
     if (valueAt(originX, originY) != 0) {
+#       ifdef DEBUG
         printf("--blocked at [%d, %d]--\n", originX, originY);
+#       endif
         return true;
     }
     if (valueAt(originX + sizeX, originY) != 0) {
-      printf("--blocked at [%d, %d]--\n", originX + sizeX, originY);
+#       ifdef DEBUG
+        printf("--blocked at [%d, %d]--\n", originX + sizeX, originY);
+#       endif
         return true;
     }
     if (valueAt(originX, originY + sizeY) != 0) {
-      printf("--blocked at [%d, %d]--\n", originX, originY + sizeY);
+#       ifdef DEBUG
+        printf("--blocked at [%d, %d]--\n", originX, originY + sizeY);
+#       endif
         return true;
     }
     if (valueAt(originX + sizeX, originY + sizeY) != 0) {
-      printf("--blocked at [%d, %d]--\n", originX + sizeX, originY + sizeY);
+#       ifdef DEBUG
+        printf("--blocked at [%d, %d]--\n", originX + sizeX, originY + sizeY);
+#       endif
         return true;
     }
-    
+
     return false;
 }
 

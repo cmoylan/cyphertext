@@ -41,7 +41,8 @@ Character::center()
 void
 Character::debug()
 {
-  printf("--\nCharacter: origin: [%d, %d] Size: [%d, %d]\n--\n", origin.x, origin.y, size.x, size.y);
+    printf("--\nCharacter: origin: [%d, %d] Size: [%d, %d]\n--\n", origin.x,
+           origin.y, size.x, size.y);
 }
 
 
@@ -111,6 +112,7 @@ Character::move(int x, int y)
 }
 
 
+// TODO: this should be part of a physics package
 void
 Character::update()
 {
@@ -118,52 +120,52 @@ Character::update()
     // start with jump velocity,
     // subtract decay
     if (jumping) {
-	// handle jump
-	if (jumpVelocity > 0) {
-	    jumpVelocity -= JUMP_DECAY;
-	    origin.y += jumpVelocity;
-	    printf("jumping: y is %d\n", origin.y);
-	    return;
-	}
-	if (jumpVelocity == 0) {
-	    jumping = false;
-	}
+        // handle jump
+        if (jumpVelocity > 0) {
+            jumpVelocity -= JUMP_DECAY;
+            origin.y += jumpVelocity;
+            printf("jumping: y is %d\n", origin.y);
+            return;
+        }
+        if (jumpVelocity == 0) {
+            jumping = false;
+        }
     }
     else {
-	// handle fall
-	// if the position under the player is blocked, do not fall
-	// if the position under the player is not blocked, start falling
-	bool canFall = game->level->canFall(origin.y - fallVelocity, origin.x,
-					    (origin.x + size.x));
+        // handle fall
+        // if the position under the player is blocked, do not fall
+        // if the position under the player is not blocked, start falling
+        bool canFall = game->level->canFall(origin.y - fallVelocity, origin.x,
+                                            (origin.x + size.x));
 
-	// fall
-	if (canFall) {
-	    falling = true;
-	    if (fallVelocity < FALL_VELOCITY_MAX) {
-		fallVelocity += FALL_Y_ACCELERATION;
-	    }
-	    origin.y -= fallVelocity;
-	    printf("falling: y is %d\n", origin.y);
-	}
+        // fall
+        if (canFall) {
+            falling = true;
+            if (fallVelocity < FALL_VELOCITY_MAX) {
+                fallVelocity += FALL_Y_ACCELERATION;
+            }
+            origin.y -= fallVelocity;
+            printf("falling: y is %d\n", origin.y);
+        }
 
-	// stop falling
-	if (falling && !canFall) {
-	    printf("stop falling at y: %d\n", origin.y);
-	    falling = false;
-	    // try to fall a little bit more
-	    for (int v = fallVelocity; v > 0; v--) {
-		printf("checking %d - %d\n", v, origin.y - v);
-		//    // i don't think is blocked works
-		if (game->level->canFall((origin.y - v), origin.x, (origin.x + size.x))) {
+        // stop falling
+        if (falling && !canFall) {
+            printf("stop falling at y: %d\n", origin.y);
+            falling = false;
+            // try to fall a little bit more
+            for (int v = fallVelocity; v > 0; v--) {
+                printf("checking %d - %d\n", v, origin.y - v);
+                //    // i don't think is blocked works
+                if (game->level->canFall((origin.y - v), origin.x, (origin.x + size.x))) {
 
-		    printf("could fall a little bit more - v is %d\n", v);
-    		    //printf("origin is [%d, %d]\n", origin.x, origin.y);
-		    origin.y -= (v+1);
-		    //printf("origin is [%d, %d]\n", origin.x, origin.y);
-		    break;
-		}
-	    }
-	    fallVelocity = FALL_Y_ACCELERATION; // reset
-	}
+                    printf("could fall a little bit more - v is %d\n", v);
+                    //printf("origin is [%d, %d]\n", origin.x, origin.y);
+                    origin.y -= (v + 1);
+                    //printf("origin is [%d, %d]\n", origin.x, origin.y);
+                    break;
+                }
+            }
+            fallVelocity = FALL_Y_ACCELERATION; // reset
+        }
     }
 }
