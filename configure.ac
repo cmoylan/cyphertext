@@ -8,6 +8,7 @@ AC_LANG(C++)
 PKG_CHECK_MODULES(SDL, sdl2)
 PKG_CHECK_MODULES(SDL_Mixer, SDL2_mixer)
 PKG_CHECK_MODULES(Freetype, freetype2)
+# TODO: pkg-check for glew
 
 # TODO: just bundle this lib
 AC_MSG_CHECKING([for libSOIL])

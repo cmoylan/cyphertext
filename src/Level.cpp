@@ -29,9 +29,8 @@ Level::canFall(int y, int startX, int endX)
     if (y <= -SCREEN_Y)  {
         return false;
     }
-    // assume each tile is 10 wide - move this to a constant or calculate it
+
     // TODO: magic numbers
-    // TODO: need a test for this to make sure everything is correct
     int col1 = (startX + 100) / (int) tileSizeX;
     int col2 = (endX + 99) / (int) tileSizeX;
     //int row = ((-1 * y) + 100) / (int) tileSizeY;
@@ -39,20 +38,16 @@ Level::canFall(int y, int startX, int endX)
 
     // need to detect the presence of tiles in the platform layers
     Layer& layer = layers.find("platforms")->second;
-    // TODO: magic number - number of cols in each row
     int gid1 = layer.tiles[(row * mapWidth) + col1];
     int gid2 = layer.tiles[(row * mapWidth) + col2];
 
-#   ifdef DEBUG
+#   ifdef DEBUG_LEVEL
+    // make sure if you change how gid1 and 2 are retreived, this changes also
     printf("-- indices are: %d, %d\n", ((row * mapWidth) + col1), ((row * mapWidth) + col2));
     printf("-- gid1 and 2 are: %d, %d\n", gid1, gid2);
 #   endif
 
-    // return gid1 == 0 && gid2 == 0
-    if (gid1 != 0 || gid2 != 0) {
-        return false;
-    }
-    return true;
+    return gid1 == 0 && gid2 == 0;
 }
 
 
@@ -96,25 +91,25 @@ Level::isBlocked(int originX, int originY, Vector2D size)
     //) {
 
     if (valueAt(originX, originY) != 0) {
-#       ifdef DEBUG
+#       ifdef DEBUG_LEVEL
         printf("--blocked at [%d, %d]--\n", originX, originY);
 #       endif
         return true;
     }
     if (valueAt(originX + sizeX, originY) != 0) {
-#       ifdef DEBUG
+#       ifdef DEBUG_LEVEL
         printf("--blocked at [%d, %d]--\n", originX + sizeX, originY);
 #       endif
         return true;
     }
     if (valueAt(originX, originY + sizeY) != 0) {
-#       ifdef DEBUG
+#       ifdef DEBUG_LEVEL
         printf("--blocked at [%d, %d]--\n", originX, originY + sizeY);
 #       endif
         return true;
     }
     if (valueAt(originX + sizeX, originY + sizeY) != 0) {
-#       ifdef DEBUG
+#       ifdef DEBUG_LEVEL
         printf("--blocked at [%d, %d]--\n", originX + sizeX, originY + sizeY);
 #       endif
         return true;

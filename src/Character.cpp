@@ -145,23 +145,26 @@ Character::update()
                 fallVelocity += FALL_Y_ACCELERATION;
             }
             origin.y -= fallVelocity;
+#           ifdef DEBUG
             printf("falling: y is %d\n", origin.y);
+#           endif
         }
 
         // stop falling
         if (falling && !canFall) {
-            printf("stop falling at y: %d\n", origin.y);
+#           ifdef DEBUG
+	    printf("stop falling at y: %d\n", origin.y);
+#           endif
             falling = false;
             // try to fall a little bit more
-            for (int v = fallVelocity; v > 0; v--) {
-                printf("checking %d - %d\n", v, origin.y - v);
-                //    // i don't think is blocked works
+	    // TODO: this doesn't work quite right.
+            for (int v = fallVelocity; v >= 0; v--) {
+	      //printf("checking %d - %d\n", v, origin.y - v);
                 if (game->level->canFall((origin.y - v), origin.x, (origin.x + size.x))) {
-
+#                   ifdef DEBUG
                     printf("could fall a little bit more - v is %d\n", v);
-                    //printf("origin is [%d, %d]\n", origin.x, origin.y);
-                    origin.y -= (v + 1);
-                    //printf("origin is [%d, %d]\n", origin.x, origin.y);
+#                   endif
+                    origin.y -= (v + 1); // this is bad
                     break;
                 }
             }

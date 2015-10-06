@@ -199,15 +199,6 @@ public:
         TS_ASSERT(level->isBlocked(-51, -51, size) == true);
         TS_ASSERT_EQUALS(level->isBlocked(-50, -100, size), false);
         TS_ASSERT_EQUALS(level->isBlocked(-50, -50, size), false);
-
-        //printf("-0 -100");
-        //TS_ASSERT_EQUALS(level->isBlocked(0, -100, size), false);
-
-        //printf("-100 -50");
-        //TS_ASSERT_EQUALS(level->isBlocked(-100, -50, size), true);
-
-        //printf("75 75");
-        //TS_ASSERT_EQUALS(level->isBlocked(75, 75, size), true);
     }
 };
 
