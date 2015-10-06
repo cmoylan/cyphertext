@@ -11,6 +11,8 @@ TEST_RUNNER = ./$(TEST_DIR)/runner
 TEST_RUNNER_SRC = $(TEST_RUNNER).cpp
 
 
+tests: test
+
 test: test_compile
 	$(TEST_RUNNER)
 

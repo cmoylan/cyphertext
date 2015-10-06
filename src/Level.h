@@ -69,11 +69,11 @@ class Level {
 
 public:
     // following are in pixels
-    int mapWidth;
-    int mapHeight;
     int tileWidth;
     int tileHeight;
     // not in pixels
+    int mapWidth;
+    int mapHeight;
     int tilesOnScreenX;
     int tilesOnScreenY;
     Vector2D camera;

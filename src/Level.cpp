@@ -34,14 +34,21 @@ Level::canFall(int y, int startX, int endX)
     // TODO: need a test for this to make sure everything is correct
     int col1 = (startX + 100) / (int) tileSizeX;
     int col2 = (endX + 99) / (int) tileSizeX;
+    //int row = ((-1 * y) + 100) / (int) tileSizeY;
     int row = ((-1 * y) + 100) / (int) tileSizeY;
 
     // need to detect the presence of tiles in the platform layers
     Layer& layer = layers.find("platforms")->second;
     // TODO: magic number - number of cols in each row
-    int gid1 = layer.tiles[(row * 20) + col1];
-    int gid2 = layer.tiles[(row * 20) + col2];
+    int gid1 = layer.tiles[(row * mapWidth) + col1];
+    int gid2 = layer.tiles[(row * mapWidth) + col2];
 
+#   ifdef DEBUG
+    printf("-- indices are: %d, %d\n", ((row * mapWidth) + col1), ((row * mapWidth) + col2));
+    printf("-- gid1 and 2 are: %d, %d\n", gid1, gid2);
+#   endif
+
+    // return gid1 == 0 && gid2 == 0
     if (gid1 != 0 || gid2 != 0) {
         return false;
     }

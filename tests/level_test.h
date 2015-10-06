@@ -28,8 +28,6 @@ public:
         level->layers["platforms"] = layer;
         level->mapWidth = 4;
         level->mapHeight = 4;
-
-        //level->printPlatforms();
     }
 
     void tearDown()
@@ -74,7 +72,8 @@ public:
         // 8,  9,  10, 11,
         // 12, 13, 14, 15
         // TODO: should we even both checking 100? It's technically off the map
-        TS_ASSERT(level->valueAt(-75, 100) == 0);
+
+	TS_ASSERT(level->valueAt(-75, 100) == 0);
         TS_ASSERT(level->valueAt(-25, 100) == 1);
         TS_ASSERT(level->valueAt(25, 100) == 2);
         TS_ASSERT(level->valueAt(75, 100) == 3);
@@ -101,7 +100,8 @@ public:
         // 4,  5,  6,  7,
         // 8,  9,  10, 11,
         // 12, 13, 14, 15
-        TS_ASSERT(level->valueAt(-100, 75) == 0);
+
+	TS_ASSERT(level->valueAt(-100, 75) == 0);
         TS_ASSERT(level->valueAt(-50, 75) == 1);
         TS_ASSERT(level->valueAt(0, 75) == 2);
         TS_ASSERT(level->valueAt(50, 75) == 3);
@@ -128,7 +128,8 @@ public:
         // 4,  5,  6,  7,
         // 8,  9,  10, 11,
         // 12, 13, 14, 15
-        TS_ASSERT(level->valueAt(-75, 75) == 0);
+
+	TS_ASSERT(level->valueAt(-75, 75) == 0);
         TS_ASSERT(level->valueAt(-25, 75) == 1);
         TS_ASSERT(level->valueAt(25, 75) == 2);
         TS_ASSERT(level->valueAt(75, 75) == 3);
@@ -177,8 +178,6 @@ public:
         level->layers["platforms"] = layer;
         level->mapWidth = 4;
         level->mapHeight = 4;
-
-        level->printPlatforms();
     }
 
     void tearDown()
@@ -192,7 +191,8 @@ public:
         // 0, 0, 0, 0,
         // 0, 0, 0, 0,
         // 1, 0, 0, 0
-        TS_TRACE("for a 1x1 character");
+
+	TS_TRACE("for a 1x1 character");
         Vector2D size = {1, 1};
         TS_ASSERT(level->isBlocked(-99, -99, size) == true);
         TS_ASSERT(level->isBlocked(-51, -100, size) == true);
@@ -225,7 +225,7 @@ public:
         //       levelWithPlatforms(platformArray[])
         int platforms[] = {
             0, 0, 0, 0,
-            0, 0, 0, 0,
+            0, 1, 0, 0,
             0, 0, 0, 0,
             1, 1, 1, 1
         };
@@ -237,8 +237,6 @@ public:
         level->layers["platforms"] = layer;
         level->mapWidth = 4;
         level->mapHeight = 4;
-
-        //level->printPlatforms();
     }
 
     void tearDown()
@@ -248,26 +246,20 @@ public:
 
     void test_canFall(void)
     {
-
         // 0, 0, 0, 0,
-        // 0, 0, 0, 0,
+        // 0, 1, 0, 0,
         // 0, 0, 0, 0,
         // 1, 1, 1, 1
-        //TS_TRACE("for a 1x1 character");
-        //Vector2D size = {1, 1};
-        //TS_ASSERT(level->isBlocked(-99, -99, size) == true);
-        //TS_ASSERT(level->isBlocked(-51, -100, size) == true);
-        //TS_ASSERT(level->isBlocked(-51, -51, size) == true);
-        //TS_ASSERT_EQUALS(level->isBlocked(-50, -100, size), false);
-        //TS_ASSERT_EQUALS(level->isBlocked(-50, -50, size), false);
 
-        //printf("-0 -100");
-        //TS_ASSERT_EQUALS(level->isBlocked(0, -100, size), false);
+	// don't fall off the screen
+	TS_ASSERT(level->canFall(-100, 0, 10) == false);
 
-        //printf("-100 -50");
-        //TS_ASSERT_EQUALS(level->isBlocked(-100, -50, size), true);
+	TS_ASSERT(level->canFall(-50, 0, 10) == false);
+	TS_ASSERT(level->canFall(50, -50, -40) == false);
+	// one pixel on a platform
+	TS_ASSERT(level->canFall(-50, -60, -51) == false);
 
-        //printf("75 75");
-        //TS_ASSERT_EQUALS(level->isBlocked(75, 75, size), true);
+        TS_ASSERT(level->canFall(0, 50, 60) == true);
+        TS_ASSERT(level->canFall(-49, 0, 1) == true);
     }
 };
