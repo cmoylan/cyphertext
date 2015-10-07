@@ -34,6 +34,8 @@
 // entities
 #define BULLET_WIDTH 2
 #define BULLET_HEIGHT 2
+#define CHARACTER_SIZE_X 10
+#define CHARACTER_SIZE_Y 10
 
 // level
 #define TILES_ON_SCREEN_X 20

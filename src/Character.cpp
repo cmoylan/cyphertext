@@ -5,8 +5,8 @@ Character::Character(Game* game, std::string texture, Vector2D position)
 {
     this->game = game;
 
-    size.x = 10;
-    size.y = 10;
+    size.x = CHARACTER_SIZE_X;
+    size.y = CHARACTER_SIZE_Y;
 
     origin.x = position.x - (size.x / 2);
     origin.y = position.y - (size.y / 2);
@@ -17,8 +17,8 @@ Character::Character(Game* game, std::string texture, Vector2D position)
     jumping = false;
     jumpVelocity = 0;
     falling = false;
-    fallVelocity =
-        FALL_Y_ACCELERATION; // technically we're always trying to fall into the ground
+    // technically we're always trying to fall into the ground
+    fallVelocity = FALL_Y_ACCELERATION;
     // ---
 }
 
